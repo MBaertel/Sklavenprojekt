@@ -1,4 +1,4 @@
-﻿namespace SchülerManagementDomain
+﻿namespace SchoolManagementDomain
 {
     public class Class1
     {
