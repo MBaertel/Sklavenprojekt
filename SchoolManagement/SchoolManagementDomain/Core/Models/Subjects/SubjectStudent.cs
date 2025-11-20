@@ -1,8 +1,10 @@
-﻿namespace SchoolManagementDomain.Core.Models.Subjects;
+﻿using SchoolManagementDomain.Core.Models.Students;
+
+namespace SchoolManagementDomain.Core.Models.Subjects;
 
 public class SubjectStudent
 {
-    public Guid SubjectId { get; set; }
-    public Guid StudentId { get; set; }
+    public Subject Subject { get; set; }
+    public Student Student { get; set; }
     public int Grade { get; set; }
 }
