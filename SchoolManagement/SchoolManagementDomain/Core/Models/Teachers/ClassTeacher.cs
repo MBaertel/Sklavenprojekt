@@ -1,7 +1,9 @@
-﻿namespace SchoolManagementDomain.Core.Models.Teachers;
+﻿using SchoolManagementDomain.Core.Models.Classes;
+
+namespace SchoolManagementDomain.Core.Models.Teachers;
 
 public class ClassTeacher
 {
-    public Guid TeacherId { get; set; }
-    public Guid ClassId { get; set; }
+    public Teacher Teacher { get; set; }
+    public Class Class { get; set; }
 }

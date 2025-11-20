@@ -1,9 +1,12 @@
-﻿namespace SchoolManagementDomain.Core.Models.Subjects;
+﻿using SchoolManagementDomain.Core.Models.Classes;
+using SchoolManagementDomain.Core.Models.Teachers;
+
+namespace SchoolManagementDomain.Core.Models.Subjects;
 
 public class Subject
 {
     public Guid Id { get; set; }
-    public Guid BaseSubjectId { get; set; }
-    public Guid TeacherId { get; set; }
-    public Guid ClassId { get; set; }
+    public BaseSubject BaseSubject { get; set; }
+    public Teacher Teacher { get; set; }
+    public Class Class { get; set; }
 }

@@ -1,6 +1,4 @@
-﻿using SchoolManagementDomain.Core.Models.Classes;
-
-namespace SchoolManagementInfrastructure.EF.Models
+﻿namespace SchoolManagementInfrastructure.EF.Models
 {
     public class EFStudent
     {

@@ -1,16 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SchoolManagementDomain.Core.Models.Classes;
-using SchoolManagementDomain.Core.Models.Exams;
-using SchoolManagementDomain.Core.Models.Students;
-using SchoolManagementDomain.Core.Models.Subjects;
-using SchoolManagementDomain.Core.Models.Teachers;
 using SchoolManagementInfrastructure.EF.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace SchoolManagementInfrastructure.EF
 {
@@ -29,8 +18,11 @@ namespace SchoolManagementInfrastructure.EF
         public DbSet<EFExamImage> ExamImages { get; set; }
 
 
-        
-        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=project;Username=admin;Password=adminpass");
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

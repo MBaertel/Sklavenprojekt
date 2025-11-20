@@ -1,11 +1,13 @@
-﻿namespace SchoolManagementDomain.Core.Models.Exams
+﻿using SchoolManagementDomain.Core.Models.Students;
+
+namespace SchoolManagementDomain.Core.Models.Exams
 {
     public class IndividualExam
     {
         public Guid Id { get; set; }
-        public Guid BaseExam { get; set; }
+        public ClassExam BaseExam { get; set; }
         public int Score { get; set; }
-        public Guid Student { get; set; }
+        public Student Student { get; set; }
         public int Grade { get; set; }
     }
 }
