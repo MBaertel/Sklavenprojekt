@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SchoolManagementDomain.Core.Models.Classes;
-using SchoolManagementDomain.Core.Models.Exams;
-using SchoolManagementDomain.Core.Models.Students;
-using SchoolManagementDomain.Core.Models.Subjects;
-using SchoolManagementDomain.Core.Models.Teachers;
 using SchoolManagementInfrastructure.EF;
 using SchoolManagementInfrastructure.EF.Models;
 
@@ -14,137 +9,136 @@ namespace SchoolManagementBackend.Controllers.GetControllers
     public class GetController(SchoolManagementContext context) : ControllerBase
     {
         [HttpGet("GetTeacher")]
-        public IActionResult GetTeacher(Teacher teacher)
+        public IActionResult GetTeacher(Guid teacherId)
         {
-            var teacherEf = context.Teachers.Single(x => x.Id == teacher.Id);
+            var teacherEf = context.Teachers.Single(x => x.Id == teacherId);
             return Ok(teacherEf);
         }
 
         [HttpGet("GetTeachers")]
-        public IActionResult GetTeachers(List<Teacher> teacherList)
+        public IActionResult GetTeachers(List<Guid> teacherIdList)
         {
             var teachers = new List<EFTeacher>();
-            foreach (var teacher in teacherList)
+            foreach (var teacher in teacherIdList)
             {
-                var teacherEf = context.Teachers.Where(x => x.Id == teacher.Id).ToList();
+                var teacherEf = context.Teachers.Where(x => x.Id == teacher).ToList();
                 teachers.AddRange(teacherEf);
             }
             return Ok(teachers);
         }
         
         [HttpGet("GetSubject")]
-        public IActionResult GetSubject(Subject subject)
+        public IActionResult GetSubject(Guid subjectId)
         {
-            var subjectEf = context.Subjects.Single(x => x.Id == subject.Id);
+            var subjectEf = context.Subjects.Single(x => x.Id == subjectId);
             return Ok(subjectEf);
         }
 
         [HttpGet("GetSubjects")]
-        public IActionResult GetSubjects(List<Subject> subjectList)
+        public IActionResult GetSubjects(List<Guid> subjectIdList)
         {
             var efSubjects = new List<EFSubject>();
-            foreach (var subject in subjectList)
+            foreach (var subject in subjectIdList)
             {
-                var foundEfSubjects = context.Subjects.Where(x => x.Id == subject.Id).ToList();
+                var foundEfSubjects = context.Subjects.Where(x => x.Id == subject).ToList();
                 efSubjects.AddRange(foundEfSubjects);
             }
             return Ok(efSubjects);
         }
         
         [HttpGet("GetStudent")]
-        public IActionResult GetStudent(Student student)
+        public IActionResult GetStudent(Guid studentId)
         {
-            var efStudent = context.Students.Single(x => x.Id == student.Id);
+            var efStudent = context.Students.Single(x => x.Id == studentId);
             return Ok(efStudent);
         }
 
         [HttpGet("GetStudents")]
-        public IActionResult GetStudents(List<Student> studentList)
+        public IActionResult GetStudents(List<Guid> studentIdList)
         {
             var efStudents = new List<EFStudent>();
-            foreach (var student in studentList)
+            foreach (var student in studentIdList)
             {
-                var foundEfStudents = context.Students.Where(x => x.Id == student.Id).ToList();
+                var foundEfStudents = context.Students.Where(x => x.Id == student).ToList();
                 efStudents.AddRange(foundEfStudents);
             }
             return Ok(efStudents);
         }
         
         [HttpGet("GetClass")]
-        public IActionResult GetClass(Class @class)
+        public IActionResult GetClass(Guid classId)
         {
-            var efClass = context.Class.Single(x => x.Id == @class.Id);
+            var efClass = context.Class.Single(x => x.Id == classId);
             return Ok(efClass);
         }
 
         [HttpGet("GetClasses")]
-        public IActionResult GetClasses(List<Class> classList)
+        public IActionResult GetClasses(List<Guid> classIdList)
         {
             var efClasses = new List<EFClass>();
-            foreach (var @class in classList)
+            foreach (var @class in classIdList)
             {
-                var found = context.Class.Where(x => x.Id == @class.Id).ToList();
+                var found = context.Class.Where(x => x.Id == @class).ToList();
                 efClasses.AddRange(found);
             }
             return Ok(efClasses);
         }
 
-        // EXAMS
         [HttpGet("GetExam")]
-        public IActionResult GetExam(ClassExam exam)
+        public IActionResult GetExam(Guid examId)
         {
-            var efClassExam = context.ClassExams.Single(x => x.Id == exam.Id);
+            var efClassExam = context.ClassExams.Single(x => x.Id == examId);
             return Ok(efClassExam);
         }
 
         [HttpGet("GetExams")]
-        public IActionResult GetExams(List<ClassExam> examList)
+        public IActionResult GetExams(List<Guid> examIdList)
         {
             var efExams = new List<EFClassExam>();
-            foreach (var exam in examList)
+            foreach (var exam in examIdList)
             {
-                var found = context.ClassExams.Where(x => x.Id == exam.Id).ToList();
+                var found = context.ClassExams.Where(x => x.Id == exam).ToList();
                 efExams.AddRange(found);
             }
             return Ok(efExams);
         }
 
         [HttpGet("GetIndividualExam")]
-        public IActionResult GetIndividualExam(IndividualExam exam)
+        public IActionResult GetIndividualExam(Guid examId)
         {
-            var ef = context.IndividualExams.Single(x => x.Id == exam.Id);
-            return Ok(ef);
+            var efExam = context.IndividualExams.Single(x => x.Id == examId);
+            return Ok(efExam);
         }
 
         [HttpGet("GetIndividualExams")]
-        public IActionResult GetIndividualExams(List<IndividualExam> exams)
+        public IActionResult GetIndividualExams(List<Guid> examIds)
         {
-            var list = new List<EFIndividualExam>();
-            foreach (var exam in exams)
+            var efIndividualExams = new List<EFIndividualExam>();
+            foreach (var exam in examIds)
             {
-                var found = context.IndividualExams.Where(x => x.Id == exam.Id).ToList();
-                list.AddRange(found);
+                var found = context.IndividualExams.Where(x => x.Id == exam).ToList();
+                efIndividualExams.AddRange(found);
             }
-            return Ok(list);
+            return Ok(efIndividualExams);
         }
         
         [HttpGet("GetExamImage")]
-        public IActionResult GetExamImage(ExamImages image)
+        public IActionResult GetExamImage(Guid imageId)
         {
-            var ef = context.ExamImages.Single(x => x.Id == image.Id);
-            return Ok(ef);
+            var efImage = context.ExamImages.Single(x => x.Id == imageId);
+            return Ok(efImage);
         }
 
         [HttpGet("GetExamImages")]
-        public IActionResult GetExamImages(List<ExamImages> images)
+        public IActionResult GetExamImages(List<Guid> imageIds)
         {
-            var list = new List<EFExamImage>();
-            foreach (var image in images)
+            var efExamImages = new List<EFExamImage>();
+            foreach (var image in imageIds)
             {
-                var found = context.ExamImages.Where(x => x.Id == image.Id).ToList();
-                list.AddRange(found);
+                var found = context.ExamImages.Where(x => x.Id == image).ToList();
+                efExamImages.AddRange(found);
             }
-            return Ok(list);
+            return Ok(efExamImages);
         }
     }
 }
