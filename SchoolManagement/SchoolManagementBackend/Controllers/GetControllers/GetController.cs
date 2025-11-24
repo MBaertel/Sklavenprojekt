@@ -11,8 +11,8 @@ namespace SchoolManagementBackend.Controllers.GetControllers
         [HttpGet("GetTeacher")]
         public IActionResult GetTeacher(Guid teacherId)
         {
-            var teacherEf = context.Teachers.Single(x => x.Id == teacherId);
-            return Ok(teacherEf);
+            var teacherEf = context.Teachers.SingleOrDefault(x => x.Id == teacherId);
+            return Ok(teacherEf == null ? null : teacherEf);
         }
 
         [HttpGet("GetTeachers")]
@@ -24,14 +24,14 @@ namespace SchoolManagementBackend.Controllers.GetControllers
                 var teacherEf = context.Teachers.Where(x => x.Id == teacher).ToList();
                 teachers.AddRange(teacherEf);
             }
-            return Ok(teachers);
+            return Ok(teachers.Count == 0 ? null : teachers);
         }
         
         [HttpGet("GetSubject")]
         public IActionResult GetSubject(Guid subjectId)
         {
-            var subjectEf = context.Subjects.Single(x => x.Id == subjectId);
-            return Ok(subjectEf);
+            var subjectEf = context.Subjects.SingleOrDefault(x => x.Id == subjectId);
+            return Ok(subjectEf == null ? null : subjectEf);
         }
 
         [HttpGet("GetSubjects")]
@@ -43,14 +43,14 @@ namespace SchoolManagementBackend.Controllers.GetControllers
                 var foundEfSubjects = context.Subjects.Where(x => x.Id == subject).ToList();
                 efSubjects.AddRange(foundEfSubjects);
             }
-            return Ok(efSubjects);
+            return Ok(efSubjects.Count == 0 ? null : efSubjects);
         }
         
         [HttpGet("GetStudent")]
         public IActionResult GetStudent(Guid studentId)
         {
             var efStudent = context.Students.Single(x => x.Id == studentId);
-            return Ok(efStudent);
+            return Ok(efStudent == null ? null : efStudent);
         }
 
         [HttpGet("GetStudents")]
@@ -62,14 +62,14 @@ namespace SchoolManagementBackend.Controllers.GetControllers
                 var foundEfStudents = context.Students.Where(x => x.Id == student).ToList();
                 efStudents.AddRange(foundEfStudents);
             }
-            return Ok(efStudents);
+            return Ok(efStudents.Count == 0 ? null : efStudents);
         }
         
         [HttpGet("GetClass")]
         public IActionResult GetClass(Guid classId)
         {
             var efClass = context.Class.Single(x => x.Id == classId);
-            return Ok(efClass);
+            return Ok(efClass == null ? null : efClass);
         }
 
         [HttpGet("GetClasses")]
@@ -81,14 +81,14 @@ namespace SchoolManagementBackend.Controllers.GetControllers
                 var found = context.Class.Where(x => x.Id == @class).ToList();
                 efClasses.AddRange(found);
             }
-            return Ok(efClasses);
+            return Ok(efClasses.Count == 0 ? null : efClasses);
         }
 
         [HttpGet("GetExam")]
         public IActionResult GetExam(Guid examId)
         {
             var efClassExam = context.ClassExams.Single(x => x.Id == examId);
-            return Ok(efClassExam);
+            return Ok(efClassExam == null ? null : efClassExam);
         }
 
         [HttpGet("GetExams")]
@@ -100,14 +100,14 @@ namespace SchoolManagementBackend.Controllers.GetControllers
                 var found = context.ClassExams.Where(x => x.Id == exam).ToList();
                 efExams.AddRange(found);
             }
-            return Ok(efExams);
+            return Ok(efExams.Count == 0 ? null : efExams);
         }
 
         [HttpGet("GetIndividualExam")]
         public IActionResult GetIndividualExam(Guid examId)
         {
             var efExam = context.IndividualExams.Single(x => x.Id == examId);
-            return Ok(efExam);
+            return Ok(efExam == null ? null : efExam);
         }
 
         [HttpGet("GetIndividualExams")]
@@ -119,14 +119,14 @@ namespace SchoolManagementBackend.Controllers.GetControllers
                 var found = context.IndividualExams.Where(x => x.Id == exam).ToList();
                 efIndividualExams.AddRange(found);
             }
-            return Ok(efIndividualExams);
+            return Ok(efIndividualExams.Count == 0 ? null : efIndividualExams);
         }
         
         [HttpGet("GetExamImage")]
         public IActionResult GetExamImage(Guid imageId)
         {
             var efImage = context.ExamImages.Single(x => x.Id == imageId);
-            return Ok(efImage);
+            return Ok(efImage == null ? null : efImage);
         }
 
         [HttpGet("GetExamImages")]
@@ -138,7 +138,7 @@ namespace SchoolManagementBackend.Controllers.GetControllers
                 var found = context.ExamImages.Where(x => x.Id == image).ToList();
                 efExamImages.AddRange(found);
             }
-            return Ok(efExamImages);
+            return Ok(efExamImages.Count == 0 ? null : efExamImages);
         }
     }
 }
