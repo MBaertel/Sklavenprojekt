@@ -7,5 +7,13 @@
 
         public EFStudent Student { get; set; }
         public Guid StudentId { get; set; }
+
+        public EFClassStudent() { }
+
+        public EFClassStudent(Guid classId, Guid studentId)
+        {
+            ClassId = classId;
+            StudentId = studentId;
+        }
     }
 }
