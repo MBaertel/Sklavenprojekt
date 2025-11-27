@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementBackend.InputModels;
 using SchoolManagementBackend.OutputModels;
-using SchoolManagementDomain.Core.Models.Teachers;
 using SchoolManagementInfrastructure.EF;
 using SchoolManagementInfrastructure.EF.Models;
-using System.Collections.Generic;
 
 namespace SchoolManagementBackend.Controllers
 {
@@ -13,10 +12,27 @@ namespace SchoolManagementBackend.Controllers
     [ApiController]
     public class TeachersController(SchoolManagementContext context) : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetTeachers()
+        [HttpGet("GetTeachers")]
+        public IActionResult GetTeachers([FromQuery]List<Guid> teacherIdList)
         {
-            var teachers = context.Teachers.ToList();
+            var teachers = new List<EFTeacher>();
+            var notFound = new List<Guid>();
+            foreach (var teacher in teacherIdList)
+            {
+                var teacherEf = context.Teachers.SingleOrDefault(x => x.Id == teacher);
+                if (teacherEf == null)
+                {
+                    notFound.Add(teacher);
+                    continue;
+                }
+                teachers.AddRange(teacherEf);
+            }
+            
+            if (notFound.Count > 0)
+            {
+                var json = JsonSerializer.Serialize(notFound);
+                return NotFound($"Following Ids of Subjects not found: {json}");
+            }
             return Ok(teachers);
         }
 
@@ -26,7 +42,7 @@ namespace SchoolManagementBackend.Controllers
             var teacherEf = context.Teachers
                 .Include(x => x.ClassTeachers)
                 .Include(x => x.Subjects)
-                .Single(x => x.Id == id);
+                .SingleOrDefault(x => x.Id == id);
             if (teacherEf == null) return NotFound();
             return Ok(TeacherDTO.FromEf(teacherEf));
         }
@@ -44,8 +60,8 @@ namespace SchoolManagementBackend.Controllers
         public async Task<IActionResult> UpdateTeacher(Guid teacherId, [FromBody] TeacherInput teacherInput)
         {
             var teacher = teacherInput.ToEF();
-            var efTeacher = context.Teachers.Where(x => x.Id == teacherId).FirstOrDefault();
-            if (efTeacher != null) return NotFound($"Teacher with Id {teacherId} not Found");
+            var efTeacher = context.Teachers.FirstOrDefault(x => x.Id == teacherId);
+            if (efTeacher == null) return NotFound($"Teacher with Id {teacherId} not Found");
             efTeacher.Name = teacherInput.Name;
             await context.SaveChangesAsync();
             return Ok(teacher.Id);
@@ -57,12 +73,12 @@ namespace SchoolManagementBackend.Controllers
             var efTeacher = context.Teachers.Where(x => x.Id == teacherId)
                 .Include(x => x.ClassTeachers)
                 .FirstOrDefault();
-            if (efTeacher != null) return NotFound($"Teacher with Id {teacherId} not Found");
+            if (efTeacher == null) return NotFound($"Teacher with Id {teacherId} not Found");
 
             var classes = await context.Class.Where(x => classIds.Contains(x.Id)).ToListAsync();
             if (classes.Count == 0) return NotFound("No classes with specified IDs found");
 
-            var classTeachers = classes.Select(x => new EFClassTeacher()
+            var classTeachers = classes.Select(x => new EFClassTeacher
             {
                 Class = x,
                 Teacher = efTeacher

@@ -7,6 +7,7 @@ namespace SchoolManagementInfrastructure.EF
     {
         public DbSet<EFStudent> Students { get; set; }
         public DbSet<EFTeacher> Teachers { get; set; }
+        public DbSet<EFClassTeacher> ClassTeachers { get; set; }
         public DbSet<EFBaseSubject> BaseSubjects { get; set; }
         public DbSet<EFSubject> Subjects { get; set; }
         public DbSet<EFClass> Class { get; set; }
@@ -75,6 +76,20 @@ namespace SchoolManagementInfrastructure.EF
                     .WithMany(b => b.Subjects)
                     .HasForeignKey(e => e.BaseSubjectId);
             });
+
+            modelBuilder.Entity<EFClassTeacher>(entity =>
+                {
+                    entity.HasKey(e => new { e.ClassId, e.TeacherId });
+
+                    entity.HasOne(e => e.Class)
+                        .WithMany(c => c.ClassTeachers)
+                        .HasForeignKey(e => e.ClassId);
+                    
+                    entity.HasOne(e => e.Teacher)
+                        .WithMany(c => c.ClassTeachers)
+                        .HasForeignKey(e => e.TeacherId);
+                }
+            );
 
             modelBuilder.Entity<EFClassExam>(entity =>
             {

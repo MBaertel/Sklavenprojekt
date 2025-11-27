@@ -6,7 +6,7 @@ namespace SchoolManagementBackend.InputModels
     {
         public string Name { get; set; }
 
-        public EFStudent ToEF()
+        public EFStudent ToEf()
         {
             return new EFStudent
             {
