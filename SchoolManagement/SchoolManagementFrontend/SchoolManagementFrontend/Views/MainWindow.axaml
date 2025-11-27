@@ -1,12 +1,72 @@
-<Window xmlns="https://github.com/avaloniaui"
+﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:SchoolManagementFrontend.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:types="using:SchoolManagementFrontend.Types"
         xmlns:views="using:SchoolManagementFrontend.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SchoolManagementFrontend.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="SchoolManagementFrontend">
-        <views:MainView />
+    <Window.DataContext>
+		<vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+	    <DataTemplate x:Key="PageItemTemplate" DataType="{x:Type types:Page}">
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+					<Svg Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        Path="{Binding IconPath}"
+                        Width="24"
+                        Height="24"
+                        Stretch="Uniform"
+                        Margin="0"/>
+                <TextBlock Grid.Column="1"
+                            Text="{Binding Title}" Margin="8 0 0 0"
+                            IsVisible="{Binding DataContext.IsMenuOpen, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </Grid>
+           </DataTemplate>
+    </Window.Resources>
+    <SplitView IsPaneOpen="{Binding IsMenuOpen}"
+               DisplayMode="CompactInline"
+               CompactPaneLength="48"
+               OpenPaneLength="200">
+	    <SplitView.Pane>
+            <Grid>
+                <Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Button Command="{Binding ToggleMenu}"
+                        Width="40"
+                        Height="40"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="8,0,0,0"
+                        Margin="0"
+                        Grid.Row="0">
+                    <Svg Path="/Assets/Icons/burgerMenu.svg"
+                         Width="24"
+                         Height="24"
+                         Stretch="Uniform"/>
+                </Button>
+
+                <ListBox ItemsSource="{Binding Pages}"
+                         SelectedItem="{Binding CurrentPage}"
+                         ItemTemplate="{StaticResource PageItemTemplate}"
+                         Grid.Row="1">
+                </ListBox>
+            </Grid>
+        </SplitView.Pane>
+        <SplitView.Content>
+			<ContentControl Content="{Binding CurrentPage.ViewModel}"/>
+        </SplitView.Content>
+    </SplitView>
 </Window>

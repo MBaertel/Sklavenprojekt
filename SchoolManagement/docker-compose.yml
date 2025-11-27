@@ -1,0 +1,44 @@
+services:
+  schoolmanagementbackend:
+    image: ${DOCKER_REGISTRY-}schoolmanagementbackend
+    build:
+      context: .
+      dockerfile: SchoolManagementBackend/Dockerfile
+
+  db:
+    image: postgres:16
+    container_name: postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      POSTGRES_DB: project
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+  
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    environment:
+        MINIO_ROOT_USER: admin
+        MINIO_ROOT_PASSWORD: adminpass
+    volumes:
+       - minio-data:/data
+    command: server /data --console-address ":9090"  
+
+volumes:
+  postgres_data:
+    driver: local
+  minio-data:
+    driver: local
+
+networks:
+  postgres-network:
+    driver: bridge

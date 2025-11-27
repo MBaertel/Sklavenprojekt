@@ -8,5 +8,13 @@ namespace SchoolManagementFrontend.Views
         {
             InitializeComponent();
         }
+
+        private void Image_ActualThemeVariantChanged(object? sender, System.EventArgs e)
+        {
+        }
+
+        private void Svg_ActualThemeVariantChanged(object? sender, System.EventArgs e)
+        {
+        }
     }
 }
