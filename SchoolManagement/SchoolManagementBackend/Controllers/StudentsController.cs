@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementBackend.InputModels;
 using SchoolManagementBackend.OutputModels;
-using SchoolManagementDomain.Core.Models.Teachers;
 using SchoolManagementInfrastructure.EF;
+using SchoolManagementInfrastructure.EF.Models;
 
 namespace SchoolManagementBackend.Controllers
 {
@@ -16,6 +16,7 @@ namespace SchoolManagementBackend.Controllers
         public async Task<IActionResult> GetStudents()
         {
             var students = await context.Students.ToListAsync();
+            if (students.Count == 0) return NotFound("No students found.");
             return Ok(students);
         }
 
@@ -35,15 +36,15 @@ namespace SchoolManagementBackend.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateStudent([FromBody] StudentInput input)
         {
-            var student = input.ToEF();
-            context.Students.Add(student);
+            var student = input.ToEf();
+            await context.Students.AddAsync(student);
             return Ok(student.Id);
         }
 
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateStudent(Guid id,[FromBody] StudentInput input)
         {
-            var student = input.ToEF();
+            var student = input.ToEf();
             var efStudent = await context.Students
                 .Where(x => x.Id == student.Id)
                 .FirstOrDefaultAsync();
@@ -51,6 +52,57 @@ namespace SchoolManagementBackend.Controllers
             efStudent.Name = student.Name;
 
             return Ok(StudentDTO.FromEf(efStudent));
+        }
+
+        [HttpGet("GetStudents")]
+        public async Task<IActionResult> GetStudents([FromQuery]List<Guid> studentIdList)
+        {
+            var efStudents = new List<EFStudent>();
+            var notFound = new List<Guid>();
+            foreach (var student in studentIdList)
+            {
+                var foundEfStudent = await context.Students.SingleOrDefaultAsync(x => x.Id == student);
+                if (foundEfStudent == null)
+                {
+                    notFound.Add(student);
+                    continue;
+                }
+                efStudents.Add(foundEfStudent);
+            }
+            
+            if (notFound.Count > 0)
+            {
+                var json = JsonSerializer.Serialize(notFound);
+                return NotFound($"Following Ids of Students not found: {json}");
+            }
+            return Ok(efStudents);
+        }
+
+        [HttpDelete("DeleteStudent")]
+        public async Task<IActionResult> DeleteStudents([FromQuery] List<Guid> studentIdList)
+        {
+            var efStudents = new List<EFStudent>();
+            var notFound = new List<Guid>();
+            foreach (var student in studentIdList)
+            {
+                var foundEfStudent = await context.Students.SingleOrDefaultAsync(x => x.Id == student);
+                if (foundEfStudent == null)
+                {
+                    notFound.Add(student);
+                    continue;
+                }
+                efStudents.Add(foundEfStudent);
+            }
+            
+            context.RemoveRange(efStudents);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            
+            if (notFound.Count > 0)
+            {
+                var json = JsonSerializer.Serialize(notFound);
+                return NotFound($" Students have been removed, except following Ids of Students because they were not found: {json}");
+            }
+            return Ok(efStudents);
         }
     }
 }

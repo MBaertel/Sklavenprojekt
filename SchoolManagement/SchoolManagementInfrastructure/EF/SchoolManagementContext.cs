@@ -7,6 +7,7 @@ namespace SchoolManagementInfrastructure.EF
     {
         public DbSet<EFStudent> Students { get; set; }
         public DbSet<EFTeacher> Teachers { get; set; }
+        public DbSet<EFClassTeacher> ClassTeachers { get; set; }
         public DbSet<EFBaseSubject> BaseSubjects { get; set; }
         public DbSet<EFSubject> Subjects { get; set; }
         public DbSet<EFClass> Class { get; set; }
@@ -16,6 +17,7 @@ namespace SchoolManagementInfrastructure.EF
         public DbSet<EFSubjectStudent> SubjectStudents { get; set; }
         public DbSet<EFClassExam> ClassExams { get; set; }
         public DbSet<EFExamImage> ExamImages { get; set; }
+        public DbSet<EFUser> Users { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -75,6 +77,20 @@ namespace SchoolManagementInfrastructure.EF
                     .WithMany(b => b.Subjects)
                     .HasForeignKey(e => e.BaseSubjectId);
             });
+
+            modelBuilder.Entity<EFClassTeacher>(entity =>
+                {
+                    entity.HasKey(e => new { e.ClassId, e.TeacherId });
+
+                    entity.HasOne(e => e.Class)
+                        .WithMany(c => c.ClassTeachers)
+                        .HasForeignKey(e => e.ClassId);
+                    
+                    entity.HasOne(e => e.Teacher)
+                        .WithMany(c => c.ClassTeachers)
+                        .HasForeignKey(e => e.TeacherId);
+                }
+            );
 
             modelBuilder.Entity<EFClassExam>(entity =>
             {
@@ -148,6 +164,15 @@ namespace SchoolManagementInfrastructure.EF
                 entity.HasOne(e => e.Subject)
                     .WithMany(s => s.SubjectStudents)
                     .HasForeignKey(e => e.SubjectId);
+            });
+
+            modelBuilder.Entity<EFUser>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+
+                entity.HasOne(e => e.UserName);
+
+                entity.Property(e => e.Role);
             });
 
         }

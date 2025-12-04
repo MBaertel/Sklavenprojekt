@@ -10,19 +10,19 @@ namespace SchoolManagementBackend.InputModels
         public List<Guid> Students { get; set; }
         public List<Guid> Teachers { get; set; }
 
-        public EFClass ToEF()
+        public EFClass ToEF(List<EFClassStudent>? students = null, List<EFClassTeacher>? teachers = null)
         {
             var id = Guid.NewGuid(); 
             var name = Name;
-            var cs = Students?.Select(x => new EFClassStudent(id, x)).ToList();
-            var ct = Teachers?.Select(x => new EFClassTeacher(id, x)).ToList();
+            var cs = students;
+            var ct = teachers;
 
             return new EFClass
             {
                 Id = id,
                 Name = name,
-                ClassStudents = cs,
-                ClassTeachers = ct,
+                ClassStudents = cs != null ? new List<EFClassStudent>() : null,
+                ClassTeachers = ct != null ? new List<EFClassTeacher>() : null,
             };
         }
     }
