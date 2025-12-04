@@ -9,12 +9,12 @@ namespace SchoolManagementBackend.OutputModels
 
         public BaseSubjectDTO BaseSubject { get; set; }
 
-        public static SubjectDTO FromEf(EFSubject efsubject)
+        public static SubjectDTO FromEf(EFSubject efSubject)
         {
             return new SubjectDTO
             {
-                Id = efsubject.Id,
-                BaseSubject = BaseSubjectDTO.FromEf(efsubject.BaseSubject),
+                Id = efSubject.Id,
+                BaseSubject = BaseSubjectDTO.FromEf(efSubject.BaseSubject),
             };
         }
     }
