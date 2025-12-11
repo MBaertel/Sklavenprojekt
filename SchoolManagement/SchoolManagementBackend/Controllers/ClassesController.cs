@@ -91,5 +91,32 @@ namespace SchoolManagementBackend.Controllers
             await context.SaveChangesAsync();
             return Ok(efClass);
         }
+        
+        [HttpDelete("DeleteClasses")]
+        public async Task<IActionResult> DeleteClasses(List<Guid> classIdList)
+        {
+            var efClasses = new List<EFClass>();
+            var notFound = new List<Guid>();
+            foreach (var @class in classIdList)
+            {
+                var found = context.Class.SingleOrDefault(x => x.Id == @class);
+                if (found == null)
+                {
+                    notFound.Add(@class);
+                    continue;
+                }
+                efClasses.Add(found);
+            }
+            
+            context.RemoveRange(efClasses);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            
+            if (notFound.Count > 0)
+            {
+                var json = JsonSerializer.Serialize(notFound);
+                return NotFound($"Classes were deleted, except following Ids of Classes because they were not found: {json}");
+            }
+            return Ok(efClasses.Count == 0 ? BadRequest($"Classes with Id {classIdList} not Found") : efClasses);
+        }
     }
 }

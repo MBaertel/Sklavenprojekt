@@ -17,6 +17,7 @@ namespace SchoolManagementInfrastructure.EF
         public DbSet<EFSubjectStudent> SubjectStudents { get; set; }
         public DbSet<EFClassExam> ClassExams { get; set; }
         public DbSet<EFExamImage> ExamImages { get; set; }
+        public DbSet<EFUser> Users { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -163,6 +164,15 @@ namespace SchoolManagementInfrastructure.EF
                 entity.HasOne(e => e.Subject)
                     .WithMany(s => s.SubjectStudents)
                     .HasForeignKey(e => e.SubjectId);
+            });
+
+            modelBuilder.Entity<EFUser>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+
+                entity.HasOne(e => e.UserName);
+
+                entity.Property(e => e.Role);
             });
 
         }

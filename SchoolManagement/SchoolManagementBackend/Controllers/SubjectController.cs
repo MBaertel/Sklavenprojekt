@@ -7,7 +7,7 @@ using SchoolManagementInfrastructure.EF.Models;
 
 namespace SchoolManagementBackend.Controllers;
 
-[Route("api/get/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class SubjectController(SchoolManagementContext context) : ControllerBase
 {
@@ -86,5 +86,32 @@ public class SubjectController(SchoolManagementContext context) : ControllerBase
         }
         await context.SaveChangesAsync();
         return Ok(efSubject);
+    }
+    
+    [HttpDelete("DeleteSubjects")]
+    public async Task<IActionResult> DeleteSubjects([FromQuery]List<Guid> subjectIdList)
+    {
+        var efSubjects = new List<EFSubject>();
+        var notFound = new List<Guid>();
+        foreach (var subjectId in subjectIdList)
+        {
+            var foundEfSubject = await context.Subjects.SingleOrDefaultAsync(x => x.Id == subjectId);
+            if (foundEfSubject == null)
+            {
+                notFound.Add(subjectId);
+                continue;
+            }
+            efSubjects.Add(foundEfSubject);
+        }
+        
+        context.RemoveRange(efSubjects);
+        await context.SaveChangesAsync().ConfigureAwait(false);
+
+        if (notFound.Count > 0)
+        {
+            var json = JsonSerializer.Serialize(notFound);
+            return NotFound($"Following Ids of Subjects not found: {json}");
+        }
+        return Ok(efSubjects);
     }
 }

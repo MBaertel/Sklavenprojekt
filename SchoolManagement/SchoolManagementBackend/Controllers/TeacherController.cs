@@ -1,8 +1,10 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementBackend.InputModels;
 using SchoolManagementBackend.OutputModels;
+using SchoolManagementDomain.Core.Models.User.Roles;
 using SchoolManagementInfrastructure.EF;
 using SchoolManagementInfrastructure.EF.Models;
 
@@ -31,7 +33,7 @@ namespace SchoolManagementBackend.Controllers
             if (notFound.Count > 0)
             {
                 var json = JsonSerializer.Serialize(notFound);
-                return NotFound($"Following Ids of Subjects not found: {json}");
+                return NotFound($"Following Ids of Teachers not found: {json}");
             }
             return Ok(teachers);
         }
@@ -89,6 +91,33 @@ namespace SchoolManagementBackend.Controllers
             }
             await context.SaveChangesAsync();
             return Ok(efTeacher);
+        }
+        
+        [HttpDelete("DeleteTeachers")]
+        public async Task<IActionResult> DeleteTeachers([FromQuery]List<Guid> teacherIdList)
+        {
+            var teachers = new List<EFTeacher>();
+            var notFound = new List<Guid>();
+            foreach (var teacher in teacherIdList)
+            {
+                var teacherEf = context.Teachers.SingleOrDefault(x => x.Id == teacher);
+                if (teacherEf == null)
+                {
+                    notFound.Add(teacher);
+                    continue;
+                }
+                teachers.AddRange(teacherEf);
+            }
+            
+            context.RemoveRange(teachers);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            
+            if (notFound.Count > 0)
+            {
+                var json = JsonSerializer.Serialize(notFound);
+                return NotFound($"Teachers were deleted, except following Ids of Teachers because they were not found: {json}");
+            }
+            return Ok(teachers);
         }
     }
 }

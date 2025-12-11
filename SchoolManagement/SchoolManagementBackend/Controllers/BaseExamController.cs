@@ -89,4 +89,20 @@ public class BaseExamController(SchoolManagementContext context) : ControllerBas
         await context.SaveChangesAsync();
         return Ok(efBaseExam.Id);
     }
+    
+    [HttpDelete("DeleteExams")]
+    public async Task<IActionResult> DeleteExams([FromQuery]List<Guid> examIdList)
+    {
+        var efExams = new List<EFClassExam>();
+        foreach (var exam in examIdList)
+        {
+            var found = context.ClassExams.Where(x => x.Id == exam).ToList();
+            efExams.AddRange(found);
+        }
+        
+        context.RemoveRange(efExams);
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        
+        return Ok(efExams);
+    }
 }

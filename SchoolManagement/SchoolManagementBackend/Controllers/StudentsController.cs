@@ -73,7 +73,34 @@ namespace SchoolManagementBackend.Controllers
             if (notFound.Count > 0)
             {
                 var json = JsonSerializer.Serialize(notFound);
-                return NotFound($"Following Ids of Subjects not found: {json}");
+                return NotFound($"Following Ids of Students not found: {json}");
+            }
+            return Ok(efStudents);
+        }
+
+        [HttpDelete("DeleteStudent")]
+        public async Task<IActionResult> DeleteStudents([FromQuery] List<Guid> studentIdList)
+        {
+            var efStudents = new List<EFStudent>();
+            var notFound = new List<Guid>();
+            foreach (var student in studentIdList)
+            {
+                var foundEfStudent = await context.Students.SingleOrDefaultAsync(x => x.Id == student);
+                if (foundEfStudent == null)
+                {
+                    notFound.Add(student);
+                    continue;
+                }
+                efStudents.Add(foundEfStudent);
+            }
+            
+            context.RemoveRange(efStudents);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            
+            if (notFound.Count > 0)
+            {
+                var json = JsonSerializer.Serialize(notFound);
+                return NotFound($" Students have been removed, except following Ids of Students because they were not found: {json}");
             }
             return Ok(efStudents);
         }
