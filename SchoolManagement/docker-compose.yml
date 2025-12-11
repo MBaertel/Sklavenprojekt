@@ -33,6 +33,18 @@ services:
        - minio-data:/data
     command: server /data --console-address ":9090"  
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command:
+      - start-dev
+    environment:
+        KEYCLOAK_ADMIN: admin
+        KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+       - "8090:8080"
+    volumes:
+       - ./keycloak-data:/opt/keycloak/data
+
 volumes:
   postgres_data:
     driver: local

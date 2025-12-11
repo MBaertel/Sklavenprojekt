@@ -3,7 +3,7 @@
         xmlns:vm="using:SchoolManagementFrontend.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:types="using:SchoolManagementFrontend.Types"
+        xmlns:types="using:SchoolManagementFrontend.Pages"
         xmlns:views="using:SchoolManagementFrontend.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SchoolManagementFrontend.Views.MainWindow"
@@ -13,7 +13,7 @@
 		<vm:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-	    <DataTemplate x:Key="PageItemTemplate" DataType="{x:Type types:Page}">
+	    <DataTemplate x:Key="PageItemTemplate">
             <Grid Margin="0">
                 <Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
@@ -46,11 +46,10 @@
                 <Button Command="{Binding ToggleMenu}"
                         Width="40"
                         Height="40"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Right"
                         Background="Transparent"
                         BorderThickness="0"
-                        Padding="8,0,0,0"
-                        Margin="0"
+                        Margin="4,0,4,0"
                         Grid.Row="0">
                     <Svg Path="/Assets/Icons/burgerMenu.svg"
                          Width="24"

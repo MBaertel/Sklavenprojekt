@@ -1,6 +1,6 @@
 ﻿using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
-using SchoolManagementFrontend.Types;
+using SchoolManagementFrontend.Pages;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,10 +13,10 @@ namespace SchoolManagementFrontend.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ObservableCollection<Page> Pages { get; set; }
+        public ObservableCollection<IPageDescriptor> Pages { get; set; }
 
-        private Page _currentPage;
-        public Page CurrentPage
+        private IPageDescriptor _currentPage;
+        public IPageDescriptor CurrentPage
         {
             get => _currentPage;
             set => SetProperty(ref _currentPage, value);
@@ -34,13 +34,6 @@ namespace SchoolManagementFrontend.ViewModels
         public MainWindowViewModel()
         {
             ToggleMenu = new RelayCommand(() => IsMenuOpen = !IsMenuOpen);
-
-            Pages = new ObservableCollection<Page>()
-            {
-                SettingsViewModel.PAGE
-            };
-
-            CurrentPage = Pages[0];
         }
     }
 }

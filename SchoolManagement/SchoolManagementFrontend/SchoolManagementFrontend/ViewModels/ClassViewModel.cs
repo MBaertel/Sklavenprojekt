@@ -1,4 +1,4 @@
-﻿using SchoolManagementDomain.Core.Models.Exams;
+﻿using SchoolManagementDomain.Core.Models.Students;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace SchoolManagementFrontend.ViewModels
 {
-    public class ExamsPageViewModel : ViewModelBase
+    internal class ClassViewModel : ViewModelBase
     {
+        public ObservableCollection<Student> Students { get; set; }
     }
 }

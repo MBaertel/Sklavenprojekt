@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace SchoolManagementFrontend;
 
-public partial class SettingsPage : UserControl
+public partial class ClassesPage : UserControl
 {
-    public SettingsPage()
+    public ClassesPage()
     {
         InitializeComponent();
     }

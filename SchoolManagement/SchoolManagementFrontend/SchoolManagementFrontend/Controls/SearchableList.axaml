@@ -2,11 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewmodels="using:SchoolManagementFrontend.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SchoolManagementFrontend.SettingsPage"
-             x:DataType="viewmodels:SettingsViewModel">
-    <StackPanel>
-		<CheckBox IsChecked="{Binding DarkModeEnabled}"/>
-    </StackPanel>
+             x:Class="SchoolManagementFrontend.SearchableList">
+  
+    <DockPanel>
+		<TextBox DockPanel.Dock="Top"
+           Watermark="Search..."
+           Text="{Binding SearchText, Mode=TwoWay}"
+           Margin="0,0,0,5"/>
+        <ListBox ItemsSource="{Binding FilteredItems}"
+                 ItemTemplate="{Binding ItemTemplate}"/>
+    </DockPanel>
 </UserControl>

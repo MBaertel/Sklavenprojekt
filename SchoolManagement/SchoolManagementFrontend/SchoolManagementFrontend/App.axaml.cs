@@ -1,19 +1,45 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
+using SchoolManagementFrontend.Pages;
+using SchoolManagementFrontend.Services;
+using SchoolManagementFrontend.Services.Interface;
+using SchoolManagementFrontend.Services.Mock;
 using SchoolManagementFrontend.ViewModels;
+using SchoolManagementFrontend.ViewModels.MainPages;
 using SchoolManagementFrontend.Views;
+using System;
 using System.Linq;
 
 namespace SchoolManagementFrontend
 {
     public partial class App : Application
     {
+        public IServiceProvider Services { get; private set; }
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+            Configure();
+        }
+
+        private void Configure()
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IPageRegistry,PageRegistry>();
+            services.AddSingleton<IBackendService, MockBackendService>();
+
+            services.AddTransient<MainWindowViewModel>();
+            services.AddTransient<ExamsPageViewModel>();
+
+            Services = services.BuildServiceProvider();
+
+            using(var sp = services.BuildServiceProvider())
+            {
+                var pageRegistry = sp.GetRequiredService<IPageRegistry>();
+            }
         }
 
         public override void OnFrameworkInitializationCompleted()

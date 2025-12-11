@@ -6,11 +6,11 @@
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
+    <!--<Application.DataTemplates>
         <DataTemplate DataType="viewmodels:SettingsViewModel">
             <local:SettingsPage/>
         </DataTemplate>
-    </Application.DataTemplates>
+    </Application.DataTemplates>-->
 
     <Application.Styles>
         <FluentTheme />
