@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SchoolManagementFrontend.Services
 {
-    public class BrowserAuthService : IOidcService
+    public class BrowserAuthService : IAuthenticator
     {
         private readonly ITokenStore _tokenStore;
         private readonly IJSRuntime _jsRuntime;

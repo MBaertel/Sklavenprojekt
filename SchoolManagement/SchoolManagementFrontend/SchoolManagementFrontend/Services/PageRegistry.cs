@@ -10,20 +10,15 @@ namespace SchoolManagementFrontend.Services
 {
     internal class PageRegistry : IPageRegistry
     {
-        private readonly IAuthService _authService;
-
         private HashSet<IPageDescriptor> _allPages;
         public IReadOnlyList<IPageDescriptor> Pages => _allPages
-            .Where(p => _authService.HasAllRoles(p.RequiredRoles))
             .ToList()
             .AsReadOnly();
 
         public event EventHandler PagesUpdated;
 
-        public PageRegistry(IAuthService authService)
+        public PageRegistry()
         {
-            _authService = authService;
-            _authService.UserLoggedIn += (s, e) => RefreshPages();
         }
 
         public void RegisterPage(IPageDescriptor page)

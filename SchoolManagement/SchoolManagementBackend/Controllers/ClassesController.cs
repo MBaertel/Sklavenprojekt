@@ -12,6 +12,8 @@ namespace SchoolManagementBackend.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateClass([FromBody] ClassInput input)
         {
+            //User.Claims.FirstOrDefault(c => c.Type == "internal_id")?.Value;
+
             var studentIds = await context.Students
                 .Where(x => input.Students.Contains(x.Id))
                 .Select(x => x.Id)
@@ -35,7 +37,7 @@ namespace SchoolManagementBackend.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateClass(Guid id, [FromBody] ClassInput input)
         {
-
+            return Ok();
         }
     }
 }

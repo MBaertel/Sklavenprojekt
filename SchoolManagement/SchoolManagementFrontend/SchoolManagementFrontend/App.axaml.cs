@@ -29,8 +29,11 @@ namespace SchoolManagementFrontend
             var services = new ServiceCollection();
 
             services.AddSingleton<IPageRegistry,PageRegistry>();
+#if DEBUG
             services.AddSingleton<IBackendService, MockBackendService>();
-
+            services.AddSingleton<ITokenStore, MockTokenStore>();
+            services.AddScoped<IAuthenticator, DesktopAuthService>();
+#endif
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<ExamsPageViewModel>();
 
@@ -49,7 +52,15 @@ namespace SchoolManagementFrontend
                 // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
                 // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
-                desktop.MainWindow = new MainWindow();
+                var vm = Services.GetRequiredService<MainWindowViewModel>();
+                var mainView = new MainView()
+                {
+                    DataContext = vm
+                };
+
+                desktop.MainWindow = mainView;
+                
+                mainView.CheckAuthOnLaunch();
             }
 
             base.OnFrameworkInitializationCompleted();

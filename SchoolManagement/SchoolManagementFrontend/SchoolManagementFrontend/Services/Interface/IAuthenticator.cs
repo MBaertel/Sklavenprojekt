@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SchoolManagementFrontend.Services.Interface
 {
-    public interface IOidcService
+    public interface IAuthenticator
     {
         public Task<bool> HasStoredCredentials();
 

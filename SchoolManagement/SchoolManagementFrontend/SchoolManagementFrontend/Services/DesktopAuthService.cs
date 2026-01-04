@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SchoolManagementFrontend.Services
 {
-    public class DesktopAuthService : IOidcService
+    public class DesktopAuthService : IAuthenticator
     {
         private readonly ITokenStore _tokenStore;
         private readonly OidcClient _oidcClient;
