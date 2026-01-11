@@ -10,6 +10,6 @@
 
         public int Grade { get; set; }
 
-        //public static IndividualExamDTO FromEf(IndividualExamDTO dto);
+        public static IndividualExamDTO FromEf(IndividualExamDTO dto)
     }
 }

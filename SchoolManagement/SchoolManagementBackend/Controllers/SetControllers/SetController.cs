@@ -18,7 +18,7 @@ public class SetController(SchoolManagementContext context) : ControllerBase
         return Ok(teacher.Id);
     }
 
-    /*[HttpPut("SetTeacher/{teacherId:guid}")]
+    [HttpPut("SetTeacher/{teacherId:guid}")]
     public async Task<IActionResult> UpdateTeacher(Guid teacherId,[FromBody]TeacherInput teacherInput)
     {
         var teacher = teacherInput.ToEF();
@@ -27,9 +27,9 @@ public class SetController(SchoolManagementContext context) : ControllerBase
         efTeacher.Name = teacherInput.Name;
         await context.SaveChangesAsync();
         Ok(teacher.Id);
-    }*/
+    }
 
-    //public async Task<IActionResult> AddClassToTeacher()
+    public async Task<IActionResult> AddClassToTeacher()
     //ClassTeacher
     //BaseSubject
     //Subject
