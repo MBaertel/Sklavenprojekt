@@ -3,6 +3,8 @@
     public class EFClassExam
     {
         public Guid Id { get; set; }
+
+        public string Name { get; set; }
         public EFClass Class { get; set; }
         public Guid ClassId { get; set; }
 
