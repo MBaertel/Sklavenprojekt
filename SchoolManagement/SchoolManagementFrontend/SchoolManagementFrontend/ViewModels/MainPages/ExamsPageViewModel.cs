@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchoolManagementFrontend.ViewModels.MainPages
+namespace SchoolManagementFrontend.ViewModels
 {
     public class ExamsPageViewModel : ViewModelBase
     {
@@ -17,6 +17,18 @@ namespace SchoolManagementFrontend.ViewModels.MainPages
         public ExamsPageViewModel(IBackendService backendService)
         {
             _backendService = backendService;
+            Load();
+        }
+
+        public async Task Load()
+        {
+            var exams = await _backendService.GetClassExams(teacherId: Guid.Parse("16d60e87-d96f-47fd-a725-d5ef2f39b258"));
+            ClassExams.Clear();
+            foreach (var exam in exams)
+            {
+                var vm = new ClassExamViewModel(exam,_backendService);
+                ClassExams.Add(vm);
+            }
         }
     }
 }

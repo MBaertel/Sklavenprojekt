@@ -10,12 +10,12 @@ namespace SchoolManagementFrontend.Services
 {
     internal class PageRegistry : IPageRegistry
     {
-        private HashSet<IPageDescriptor> _allPages;
+        private HashSet<IPageDescriptor> _allPages = new HashSet<IPageDescriptor>();
         public IReadOnlyList<IPageDescriptor> Pages => _allPages
             .ToList()
             .AsReadOnly();
 
-        public event EventHandler PagesUpdated;
+        public event EventHandler<IPageDescriptor> PagesUpdated;
 
         public PageRegistry()
         {
@@ -24,11 +24,12 @@ namespace SchoolManagementFrontend.Services
         public void RegisterPage(IPageDescriptor page)
         {
             _allPages.Add(page);
+            PagesUpdated?.Invoke(this, page);
         }
 
         private void RefreshPages()
         {
-            PagesUpdated?.Invoke(this, EventArgs.Empty);
+            PagesUpdated?.Invoke(this, null);
         }
     }
 }

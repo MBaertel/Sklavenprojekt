@@ -62,7 +62,7 @@
             </Grid>
         </SplitView.Pane>
         <SplitView.Content>
-			<ContentControl Content="{Binding CurrentPage.ViewModel}"/>
+			<ContentControl Content="{Binding CurrentViewModel}"/>
         </SplitView.Content>
     </SplitView>
 </Window>

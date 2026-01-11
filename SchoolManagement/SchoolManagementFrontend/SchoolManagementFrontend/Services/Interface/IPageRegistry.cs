@@ -11,7 +11,7 @@ namespace SchoolManagementFrontend.Services.Interface
     {
         IReadOnlyList<IPageDescriptor> Pages { get; }
 
-        event EventHandler PagesUpdated;
+        event EventHandler<IPageDescriptor> PagesUpdated;
         public void RegisterPage(IPageDescriptor page);
     }
 }

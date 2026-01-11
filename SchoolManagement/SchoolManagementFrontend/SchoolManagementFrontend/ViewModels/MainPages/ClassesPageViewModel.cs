@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchoolManagementFrontend.ViewModels.MainPages
+namespace SchoolManagementFrontend.ViewModels
 {
     internal class ClassesPageViewModel
     {

@@ -1,5 +1,5 @@
 ﻿using SchoolManagementFrontend.Services.Interface;
-using SchoolManagementFrontend.ViewModels.MainPages;
+using SchoolManagementFrontend.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +17,8 @@ namespace SchoolManagementFrontend.Pages
             "exams.read"
         };
         
-        public ExamsPageDescriptor(IPageRegistry pageRegistry,ExamsPageViewModel vm)
-            :base("Exams",ICON_PATH,vm)
+        public ExamsPageDescriptor()
+            :base("Exams",ICON_PATH)
         {
         }
     }

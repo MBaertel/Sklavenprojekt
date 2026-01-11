@@ -2,17 +2,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:SchoolManagementFrontend"
              xmlns:viewmodels="using:SchoolManagementFrontend.ViewModels"
+             xmlns:views="using:SchoolManagementFrontend.Views"
              x:Class="SchoolManagementFrontend.App"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <!--<Application.DataTemplates>
-        <DataTemplate DataType="viewmodels:SettingsViewModel">
-            <local:SettingsPage/>
+    <Application.DataTemplates>
+
+        <!--Page Templates-->
+
+        <DataTemplate DataType="{x:Type viewmodels:ExamsPageViewModel}">
+			<local:ExamsPage/>
         </DataTemplate>
-    </Application.DataTemplates>-->
+
+        <!--Other Templates-->
+
+        <DataTemplate DataType="{x:Type viewmodels:ClassExamViewModel}">
+			<local:ClassExamListItemTemplate/>
+        </DataTemplate>
+    </Application.DataTemplates>
 
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
+
+
 </Application>

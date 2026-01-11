@@ -12,7 +12,6 @@ namespace SchoolManagementFrontend.Pages
     {
         public string Title { get; }
         public string IconPath { get; }
-        public object ViewModel { get; }
         public Type ViewModelType { get; }
         public List<string> RequiredRoles { get; }
     }
@@ -21,16 +20,13 @@ namespace SchoolManagementFrontend.Pages
     {
         public string Title { get; }
         public string IconPath { get; }
-        public T ViewModel { get; }
-        object IPageDescriptor.ViewModel => ViewModel;
-        public Type ViewModelType => ViewModel.GetType();
+        public Type ViewModelType => typeof(T);
         public List<string> RequiredRoles { get; }
 
-        public PageDescriptor(string title, string iconPath, T viewModel,List<string> requiredScopes = null)
+        public PageDescriptor(string title, string iconPath,List<string> requiredScopes = null)
         {
             Title = title;
             IconPath = iconPath;
-            ViewModel = viewModel;
             RequiredRoles = requiredScopes ?? new List<string>();
         }
 

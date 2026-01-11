@@ -8,7 +8,7 @@ using SchoolManagementFrontend.Services;
 using SchoolManagementFrontend.Services.Interface;
 using SchoolManagementFrontend.Services.Mock;
 using SchoolManagementFrontend.ViewModels;
-using SchoolManagementFrontend.ViewModels.MainPages;
+using SchoolManagementFrontend.ViewModels;
 using SchoolManagementFrontend.Views;
 using System;
 using System.Linq;
@@ -39,9 +39,11 @@ namespace SchoolManagementFrontend
 
             Services = services.BuildServiceProvider();
 
-            using(var sp = services.BuildServiceProvider())
+            using(var sp = Services.CreateScope())
             {
-                var pageRegistry = sp.GetRequiredService<IPageRegistry>();
+                var pageRegistry = sp.ServiceProvider.GetRequiredService<IPageRegistry>();
+
+                pageRegistry.RegisterPage(new ExamsPageDescriptor());
             }
         }
 
