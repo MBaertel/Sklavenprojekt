@@ -1,11 +1,92 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:examspage="using:SchoolManagementFrontend.ViewModels.MainPages.ExamsPage"
              xmlns:local="using:SchoolManagementFrontend"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:utils="using:SchoolManagementFrontend.Utils"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SchoolManagementFrontend.ExamsPage">
-  <Grid>
-      <ListBox ItemsSource="{Binding ClassExams}"/>
-  </Grid>
+     <UserControl.Resources>
+        <utils:NullBoolConverter x:Key="NullBool"/>
+    </UserControl.Resources>
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TreeView ItemsSource="{Binding ClassGroups}" Grid.Column="0"
+                  SelectedItem="{Binding SelectedExam,Mode=TwoWay}"
+                  Background="#FAFAFA">
+            <TreeView.DataTemplates>
+                <TreeDataTemplate DataType="examspage:ClassGroupViewModel" ItemsSource="{Binding Subjects}">
+					<TextBlock Text="{Binding ClassName}"/>
+                </TreeDataTemplate>
+				<TreeDataTemplate DataType="examspage:SubjectGroupViewModel" ItemsSource="{Binding Exams}">
+					<TextBlock Text="{Binding SubjectName}"/>
+                </TreeDataTemplate>
+                <DataTemplate DataType="examspage:ClassExamViewModel">
+                    <Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Date}" Grid.Column="1"
+                                   Margin="0,0,4,0"/>
+                    </Grid>
+                </DataTemplate>
+            </TreeView.DataTemplates>
+        </TreeView>
+        <Border Grid.Column="1"
+                BorderBrush="#DFDFDF"
+                BorderThickness="1,0,0,0">
+			<Grid IsVisible="{Binding SelectedExam,Converter={StaticResource NullBool}}">
+            <Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding SelectedExam.Name}"
+                       Grid.Column="0" Grid.Row="0"
+                       FontSize="20"
+                       Margin="8"/>
+            <TextBlock Text="{Binding SelectedExam.Date}"
+                       HorizontalAlignment="Right"
+                       Grid.Column="1" Grid.Row="0"
+                       FontSize="18"
+                       VerticalAlignment="Center"/>
+            <TextBlock Text="Offen"
+                       FontSize="14"
+                       Grid.Row="1"
+                       Margin="8,0,0,0"/>
+            <StackPanel Orientation="Horizontal" 
+                        Grid.Row="1" Grid.Column="1"
+                        HorizontalAlignment="Right">
+				<TextBlock Text="⌀"
+                           FontSize="12"/>
+                <TextBlock Text="{Binding SelectedExam.Average}"
+                           FontSize="14"/>
+            </StackPanel>
+			<DataGrid ItemsSource="{Binding SelectedExam.IndividualExams}"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch"
+                      Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+			    <DataGrid.Columns>
+				    <DataGridTextColumn Header="Schüler" Binding="{Binding StudentName}"/>
+                    <DataGridTextColumn Header="Note" Binding="{Binding Score}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        </Border>
+        
+        
+    </Grid>
 </UserControl>

@@ -1,6 +1,8 @@
 <Application xmlns="https://github.com/avaloniaui"
+             xmlns:examspage="using:SchoolManagementFrontend.ViewModels.MainPages.ExamsPage"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:SchoolManagementFrontend"
+             xmlns:pages="using:SchoolManagementFrontend.Pages"
              xmlns:viewmodels="using:SchoolManagementFrontend.ViewModels"
              xmlns:views="using:SchoolManagementFrontend.Views"
              x:Class="SchoolManagementFrontend.App"
@@ -11,19 +13,23 @@
 
         <!--Page Templates-->
 
-        <DataTemplate DataType="{x:Type viewmodels:ExamsPageViewModel}">
+        <DataTemplate DataType="{x:Type viewmodels:MainPages.ExamsPage.ExamsPageViewModel}">
 			<local:ExamsPage/>
         </DataTemplate>
 
-        <!--Other Templates-->
-
-        <DataTemplate DataType="{x:Type viewmodels:ClassExamViewModel}">
-			<local:ClassExamListItemTemplate/>
+        <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+			<local:LoginControl/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:MainPageViewModel}">
+			<local:MainPageControl/>
+        </DataTemplate>
+
     </Application.DataTemplates>
 
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
     </Application.Styles>
 
 

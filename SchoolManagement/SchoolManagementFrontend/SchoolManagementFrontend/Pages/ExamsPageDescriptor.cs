@@ -1,5 +1,5 @@
 ﻿using SchoolManagementFrontend.Services.Interface;
-using SchoolManagementFrontend.ViewModels;
+using SchoolManagementFrontend.ViewModels.MainPages.ExamsPage;
 using System;
 using System.Collections.Generic;
 using System.Linq;

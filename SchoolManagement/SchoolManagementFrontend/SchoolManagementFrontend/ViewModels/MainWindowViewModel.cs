@@ -1,82 +1,48 @@
-﻿using Avalonia.Styling;
-using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
-using SchoolManagementFrontend.Pages;
-using SchoolManagementFrontend.Services.Interface;
+﻿using SchoolManagementFrontend.Services.Interface;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace SchoolManagementFrontend.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly IAuthenticator _authenticator;
-        private readonly IPageRegistry _pageRegistry;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly LoginViewModel _loginViewModel;
+        private readonly MainPageViewModel _mainPageViewModel;
 
-        public IAuthenticator Authenticator => _authenticator;
-        public ObservableCollection<IPageDescriptor> Pages { get; set; }
-
-        private IPageDescriptor? _currentPage;
-        public IPageDescriptor? CurrentPage
+        private ViewModelBase _currentView;
+        public ViewModelBase CurrentView
         {
-            get => _currentPage;
-            set 
-            { 
-                if(SetProperty(ref _currentPage, value))
-                {
-                    Navigate(value);
-                }            
-            } 
+            get => _currentView;
+            set => SetProperty(ref _currentView, value);
         }
 
-        private object? _currentViewModel;
-        public object? CurrentViewModel
+        public MainWindowViewModel(IAuthenticator authenticator,MainPageViewModel mainVm,LoginViewModel loginVm)
         {
-            get => _currentViewModel;
-            private set => SetProperty(ref _currentViewModel, value);
+            this._authenticator = authenticator;
+            this._loginViewModel = loginVm;
+            this._mainPageViewModel = mainVm;
+
+            _loginViewModel.LoginSuccessful += OnLoginSucceeded;
+            Initialize();
         }
 
-        private bool _isMenuOpen;
-        public bool IsMenuOpen
+        private void OnLoginSucceeded(object? sender, bool e)
         {
-            get => _isMenuOpen;
-            set => SetProperty(ref _isMenuOpen, value);
+            CurrentView = _mainPageViewModel;
         }
 
-        public ICommand ToggleMenu { get; }
-
-        public MainWindowViewModel(IAuthenticator authenticator,IPageRegistry pageRegistry,IServiceProvider serviceProvider)
+        private async void Initialize()
         {
-            _serviceProvider = serviceProvider;
-            _authenticator = authenticator;
-            _pageRegistry = pageRegistry;
-            _pageRegistry.PagesUpdated += OnPagesUpdated;
-
-            Pages = new ObservableCollection<IPageDescriptor>(pageRegistry.Pages);
-
-            ToggleMenu = new RelayCommand(() => IsMenuOpen = !IsMenuOpen);
+            CurrentView = await UserIsLoggedIn() ? _mainPageViewModel : _loginViewModel;
         }
 
-        private void OnPagesUpdated(object sender,IPageDescriptor e)
+        private async Task<bool> UserIsLoggedIn()
         {
-            Pages.Clear();
-            foreach (var page in _pageRegistry.Pages)
-            {
-                Pages.Add(page);
-            }
-        }
-
-        private void Navigate(IPageDescriptor? page)
-        {
-            if (page is null) return;
-
-            CurrentViewModel = _serviceProvider.GetRequiredService(page.ViewModelType);
+            return await _authenticator.HasStoredCredentials();
         }
     }
 }

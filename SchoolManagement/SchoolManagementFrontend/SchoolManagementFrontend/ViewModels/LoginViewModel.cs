@@ -20,6 +20,8 @@ namespace SchoolManagementFrontend.ViewModels
             set => SetProperty(ref _errorMsg, value);
         }
 
+        public event EventHandler<bool> LoginSuccessful;
+
         public ICommand LoginCommand { get; }
 
         public Action CloseAction { get; set; }
@@ -37,6 +39,10 @@ namespace SchoolManagementFrontend.ViewModels
             {
                 ErrorMsg = "Login Failed";
                 return;
+            }
+            else
+            {
+                LoginSuccessful?.Invoke(this, true);
             }
 
             CloseAction?.Invoke();

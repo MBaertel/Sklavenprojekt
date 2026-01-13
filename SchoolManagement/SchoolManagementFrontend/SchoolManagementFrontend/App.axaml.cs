@@ -8,8 +8,7 @@ using SchoolManagementFrontend.Services;
 using SchoolManagementFrontend.Services.Interface;
 using SchoolManagementFrontend.Services.Mock;
 using SchoolManagementFrontend.ViewModels;
-using SchoolManagementFrontend.ViewModels;
-using SchoolManagementFrontend.Views;
+using SchoolManagementFrontend.ViewModels.MainPages.ExamsPage;
 using System;
 using System.Linq;
 
@@ -32,37 +31,42 @@ namespace SchoolManagementFrontend
 #if DEBUG
             services.AddSingleton<IBackendService, MockBackendService>();
             services.AddSingleton<ITokenStore, MockTokenStore>();
-            services.AddScoped<IAuthenticator, DesktopAuthService>();
+            services.AddScoped<IAuthenticator, MockAuthService>();
 #endif
-            services.AddTransient<MainWindowViewModel>();
-            services.AddTransient<ExamsPageViewModel>();
+            services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<MainPageViewModel>();
+            services.AddSingleton<ExamsPageViewModel>();
+            services.AddSingleton<LoginViewModel>();
 
             Services = services.BuildServiceProvider();
 
-            using(var sp = Services.CreateScope())
-            {
-                var pageRegistry = sp.ServiceProvider.GetRequiredService<IPageRegistry>();
-
-                pageRegistry.RegisterPage(new ExamsPageDescriptor());
-            }
+            var pageRegistry = Services.GetRequiredService<IPageRegistry>();
+            pageRegistry.RegisterPage(new ExamsPageDescriptor());
         }
 
         public override void OnFrameworkInitializationCompleted()
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-                // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
                 var vm = Services.GetRequiredService<MainWindowViewModel>();
-                var mainView = new MainView()
+                var mainView = new MainWindow()
                 {
                     DataContext = vm
                 };
 
                 desktop.MainWindow = mainView;
-                
-                mainView.CheckAuthOnLaunch();
+            }
+            else if(ApplicationLifetime is ISingleViewApplicationLifetime singleView)
+            {
+                DisableAvaloniaDataAnnotationValidation();
+                var vm = Services.GetRequiredService<MainWindowViewModel>();
+                var mainView = new MainWindow()
+                {
+                    DataContext = vm
+                };
+
+                singleView.MainView = mainView;
             }
 
             base.OnFrameworkInitializationCompleted();

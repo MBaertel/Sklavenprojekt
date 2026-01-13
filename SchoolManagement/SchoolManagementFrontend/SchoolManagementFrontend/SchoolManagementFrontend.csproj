@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" />
     <PackageReference Include="Avalonia.Svg.Skia" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
@@ -36,9 +37,6 @@
   <ItemGroup>
     <Compile Update="Templates\ClassExamListItemTemplate.axaml.cs">
       <DependentUpon>ClassExamListItemTemplate.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainView.axaml.cs">
-      <DependentUpon>MainView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SchoolManagementFrontend.Services.Mock
 {
-    internal class MockAuthService : IAuthorizationService
+    internal class MockAuthService : IAuthenticator
     {
         private readonly HashSet<string> _userScopes = new();
         private bool _userLoggedIn = false;
@@ -41,10 +41,9 @@ namespace SchoolManagementFrontend.Services.Mock
             return _userScopes.All(g => HasRole(g));
         }
 
-        public async Task LoginAsync(string username, string password)
+        public async Task<bool> Login()
         {
             CurrentUserId = Guid.NewGuid();
-            CurrentUserName = username;
 
             _userScopes.Clear();
             _userScopes.Add("user.read");
@@ -52,6 +51,7 @@ namespace SchoolManagementFrontend.Services.Mock
 
             await Task.Delay(500);
             IsLoggedIn = true;
+            return true;
         }
 
         public async Task LogoutAsync()
@@ -62,6 +62,16 @@ namespace SchoolManagementFrontend.Services.Mock
 
             await Task.Delay(50);
             IsLoggedIn = false;
+        }
+
+        public async Task<bool> HasStoredCredentials()
+        {
+            return true;
+        }
+
+        public async Task<bool> TryRefresh()
+        {
+            return true;
         }
     }
 }
