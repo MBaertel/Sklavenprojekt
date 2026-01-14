@@ -1,4 +1,6 @@
-﻿using SchoolManagementDomain.Core.Models.Exams;
+﻿using SchoolManagementDomain.Core.Models.Classes;
+using SchoolManagementDomain.Core.Models.Exams;
+using SchoolManagementDomain.Core.Models.Subjects;
 using SchoolManagementFrontend.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,13 @@ namespace SchoolManagementFrontend.ViewModels.MainPages.ExamsPage
     {
         private readonly IBackendService _backendService;
 
+        public Class Class => exam.Class;
+        public Subject Subject => exam.Subject;
+
         public string Name => exam.Name;
         public DateTime Date => exam.Date;
         public int Count => IndividualExams.Count;
-        public double Average => IndividualExams.Any() ? Math.Round(IndividualExams.Average(x => x.Score),2) : 0;
+        public double? Average => IndividualExams.Any() ? IndividualExams.Average(x => x.Score) : 0;
         public string StatusString => exam.Open ? "Offen" : "Abgeschlossen";
         public string SubjectName => exam.Subject.BaseSubject.Name;
         public string ClassName => exam.Class.Name;
@@ -47,7 +52,7 @@ namespace SchoolManagementFrontend.ViewModels.MainPages.ExamsPage
             var exams = await _backendService.GetIndividualExams(exam.Id); 
             foreach (var item in exams) 
             { 
-                IndividualExams.Add(new IndividualExamViewModel(item)); 
+                IndividualExams.Add(new IndividualExamViewModel(item,_backendService)); 
             } 
         }
     }

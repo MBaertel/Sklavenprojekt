@@ -2,6 +2,7 @@
              xmlns:examspage="using:SchoolManagementFrontend.ViewModels.MainPages.ExamsPage"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:SchoolManagementFrontend"
+             xmlns:overlays="using:SchoolManagementFrontend.ViewModels.Overlays"
              xmlns:pages="using:SchoolManagementFrontend.Pages"
              xmlns:viewmodels="using:SchoolManagementFrontend.ViewModels"
              xmlns:views="using:SchoolManagementFrontend.Views"
@@ -17,12 +18,20 @@
 			<local:ExamsPage/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewmodels:MainPages.StudentsPage.StudentsPageViewModel}">
+			<local:StudentsPage/>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
 			<local:LoginControl/>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type viewmodels:MainPageViewModel}">
 			<local:MainPageControl/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type overlays:ClassExamOverlayViewModel}">
+			<local:ClassExamOverlay/>
         </DataTemplate>
 
     </Application.DataTemplates>

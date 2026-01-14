@@ -6,6 +6,7 @@ using SchoolManagementDomain.Core.Models.Teachers;
 using SchoolManagementFrontend.Services.Interface;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,9 @@ namespace SchoolManagementFrontend.Services.Mock
         private List<ClassStudents> classStudents = MockDataProvider.ClassStudents;
         private List<ClassTeacher> classTeachers = MockDataProvider.ClassTeachers;
         private List<SubjectStudent> subjectStudents = MockDataProvider.SubjectStudents;
+        private List<ExamImages> examImages = new();
+
+        public event Action NewObject;
 
         public Task<Class> GetClass(Guid id) =>
             Task.FromResult(classes.Where(x => x.Id == id).FirstOrDefault());
@@ -54,6 +58,9 @@ namespace SchoolManagementFrontend.Services.Mock
                 return Task.FromResult(classTeachers
                     .Where(x => x.Teacher.Id == teacherId.Value)
                     .Select(x => x.Class)
+                    .Concat(subjects
+                        .Where(x => x.Teacher.Id == teacherId.Value)
+                        .Select(x => x.Class))
                     .ToList());
             return Task.FromResult(classes.ToList());
         }
@@ -73,6 +80,34 @@ namespace SchoolManagementFrontend.Services.Mock
                     .Where(x => x.Subject.Teacher.Id == teacherId.Value)
                     .ToList());
             return Task.FromResult(classExams.ToList());
+        }
+
+        public Task CreateClassExam(ClassExam exam)
+        {
+            classExams.Add(exam);
+            var students = subjectStudents.Where(x => x.Subject.Id == exam.Subject.Id).Select(x => x.Student);
+            var newIndividualExams = students.Select(x => new IndividualExam()
+            {
+                Student = x,
+                BaseExam = exam,
+                Id = Guid.NewGuid(),
+            });
+            individualExams.AddRange(newIndividualExams);
+
+            NewObject?.Invoke();
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateClassExam(Guid id,ClassExam exam)
+        {
+            var prevExam = classExams.FirstOrDefault(x => x.Id == id);
+            if (prevExam == null) return Task.CompletedTask;
+
+            prevExam.Name = exam.Name;
+            prevExam.Date = exam.Date;
+
+            NewObject?.Invoke();
+            return Task.CompletedTask;
         }
 
         public Task<List<IndividualExam>> GetIndividualExams(Guid? classExamId = null, Guid? studentId = null)
@@ -125,6 +160,40 @@ namespace SchoolManagementFrontend.Services.Mock
         public Task<List<Teacher>> GetTeachers()
         {
             return Task.FromResult(teachers.ToList());
+        }
+
+        public Task<List<ExamImages>> GetExamImages(Guid individualExamId)
+        {
+            return Task.FromResult(examImages.Where(x => x.Exam.Id == individualExamId).ToList());
+        }
+
+        public Task UploadExamImage(ExamImages examImage, byte[] imageData)
+        {
+            
+            examImage.Id = Guid.NewGuid();
+            if(!Directory.Exists("./ImageUploads"))
+            {
+                Directory.CreateDirectory("./ImageUploads");
+            }
+            File.WriteAllBytes($"./ImageUploads/{examImage.Id}.jpg", imageData);
+            examImage.Link = $"./ImageUploads/{examImage.Id}.jpg";
+            
+            examImages.Add(examImage);
+            NewObject?.Invoke();
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateIndividualExam(Guid id, IndividualExam exam)
+        {
+            var prevExam = individualExams.FirstOrDefault(x => x.Id == id);
+            prevExam.Finalized = exam.Finalized;
+            prevExam.Score = exam.Score;
+            prevExam.Grade = exam.Grade;
+            prevExam.Notes = exam.Notes;
+            prevExam.HandedInAt = exam.HandedInAt;
+
+            NewObject?.Invoke();
+            return Task.CompletedTask;
         }
     }
 }

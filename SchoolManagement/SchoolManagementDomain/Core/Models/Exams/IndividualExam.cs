@@ -6,10 +6,11 @@ namespace SchoolManagementDomain.Core.Models.Exams
     {
         public Guid Id { get; set; }
         public ClassExam BaseExam { get; set; }
-        public int Score { get; set; }
+        public int? Score { get; set; }
         public Student Student { get; set; }
         public string Grade { get; set; }
-        public DateTime HandedInAt { get; set; }
+        public string Notes { get; set; }
+        public DateTime? HandedInAt { get; set; } = null;
         public bool Finalized { get; set; }
     }
 }

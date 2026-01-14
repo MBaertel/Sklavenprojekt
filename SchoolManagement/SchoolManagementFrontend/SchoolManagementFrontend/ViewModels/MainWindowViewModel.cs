@@ -1,4 +1,5 @@
 ﻿using SchoolManagementFrontend.Services.Interface;
+using SchoolManagementFrontend.ViewModels.Overlays;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,13 @@ namespace SchoolManagementFrontend.ViewModels
             set => SetProperty(ref _currentView, value);
         }
 
+        private IOverlay _currentOverlay;
+        public IOverlay CurrentOverlay
+        {
+            get => _currentOverlay;
+            set => SetProperty(ref _currentOverlay, value);
+        }
+
         public MainWindowViewModel(IAuthenticator authenticator,MainPageViewModel mainVm,LoginViewModel loginVm)
         {
             this._authenticator = authenticator;
@@ -28,13 +36,6 @@ namespace SchoolManagementFrontend.ViewModels
 
             _loginViewModel.LoginSuccessful += OnLoginSucceeded;
             Initialize();
-        }
-
-        private bool _overlayVisible = false;
-        public bool OverlayVisible
-        {
-            get => _overlayVisible;
-            set => SetProperty(ref _overlayVisible, value);
         }
 
         private void OnLoginSucceeded(object? sender, bool e)
@@ -51,5 +52,27 @@ namespace SchoolManagementFrontend.ViewModels
         {
             return await _authenticator.HasStoredCredentials();
         }
+
+        public void ShowOverlay(IOverlay overlay)
+        {
+            // Close any existing overlay
+            CurrentOverlay?.Close();
+
+            CurrentOverlay = overlay;
+
+            overlay.RequestClose += () =>
+            {
+                overlay.RequestClose -= () => { }; // unsubscribe
+                overlay.OnClosed();
+                CurrentOverlay = null;
+            };
+        }
+
+        public void CloseOverlay()
+        {
+            CurrentOverlay?.OnClosed();
+            CurrentOverlay = null;
+        }
+
     }
 }

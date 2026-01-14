@@ -11,5 +11,5 @@ public class ClassExam
     public Class Class { get; set; }
     public Subject Subject { get; set; }
     public DateTime Date { get; set; }
-    public bool Open { get; set; }
+    public bool Open { get; set; } = true;
 }

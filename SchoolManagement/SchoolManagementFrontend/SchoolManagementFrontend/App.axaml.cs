@@ -9,6 +9,7 @@ using SchoolManagementFrontend.Services.Interface;
 using SchoolManagementFrontend.Services.Mock;
 using SchoolManagementFrontend.ViewModels;
 using SchoolManagementFrontend.ViewModels.MainPages.ExamsPage;
+using SchoolManagementFrontend.ViewModels.MainPages.StudentsPage;
 using System;
 using System.Linq;
 
@@ -16,7 +17,9 @@ namespace SchoolManagementFrontend
 {
     public partial class App : Application
     {
-        public IServiceProvider Services { get; private set; }
+        public static IServiceProvider Services { get; private set; }
+
+        public static MainWindow MainWindow { get; private set; }
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -32,16 +35,19 @@ namespace SchoolManagementFrontend
             services.AddSingleton<IBackendService, MockBackendService>();
             services.AddSingleton<ITokenStore, MockTokenStore>();
             services.AddScoped<IAuthenticator, MockAuthService>();
+            services.AddScoped<IOverlayService, OverlayService>();
 #endif
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainPageViewModel>();
             services.AddSingleton<ExamsPageViewModel>();
+            services.AddSingleton<StudentsPageViewModel>();
             services.AddSingleton<LoginViewModel>();
 
             Services = services.BuildServiceProvider();
 
             var pageRegistry = Services.GetRequiredService<IPageRegistry>();
             pageRegistry.RegisterPage(new ExamsPageDescriptor());
+            pageRegistry.RegisterPage(new StudentsPageDescriptor());
         }
 
         public override void OnFrameworkInitializationCompleted()
@@ -56,6 +62,7 @@ namespace SchoolManagementFrontend
                 };
 
                 desktop.MainWindow = mainView;
+                MainWindow = mainView;
             }
             else if(ApplicationLifetime is ISingleViewApplicationLifetime singleView)
             {
@@ -67,6 +74,7 @@ namespace SchoolManagementFrontend
                 };
 
                 singleView.MainView = mainView;
+                MainWindow = mainView;
             }
 
             base.OnFrameworkInitializationCompleted();

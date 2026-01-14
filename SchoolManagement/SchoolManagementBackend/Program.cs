@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using SchoolManagementBackend.Middleware;
+using SchoolManagementInfrastructure.Services;
 
 namespace SchoolManagementBackend
 {
@@ -34,6 +35,8 @@ namespace SchoolManagementBackend
                         )
                     };
                 });
+
+            builder.Services.AddScoped<IFileSystem, MinioFileSystem>();
             
             builder.Services.AddAuthorization();
 

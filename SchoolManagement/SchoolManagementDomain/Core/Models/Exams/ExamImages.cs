@@ -3,7 +3,7 @@
 public class ExamImages
 {
     public Guid Id { get; set; }
-    public IndividualExam ExamId { get; set; }
+    public IndividualExam Exam { get; set; }
     public string Name { get; set; }
     public string Link { get; set; }
 }

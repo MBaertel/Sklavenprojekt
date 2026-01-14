@@ -9,6 +9,7 @@ public class ExamImageInput
     public Guid ExamId { get; set; }
     public string Name { get; set; }
     public string Link { get; set; }
+    public byte[] ImageData { get; set; }
 
     public EFExamImage ToEf()
     {
@@ -18,7 +19,8 @@ public class ExamImageInput
             Exam = Exam,
             ExamId = ExamId,
             Name = Name,
-            Link = Link
+            Link = Link,
+            ImageData = ImageData
         };
     }
 }

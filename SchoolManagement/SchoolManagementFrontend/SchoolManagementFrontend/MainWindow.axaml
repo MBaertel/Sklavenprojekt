@@ -2,15 +2,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:utils="using:SchoolManagementFrontend.Utils"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SchoolManagementFrontend.MainWindow"
         Title="MainWindow">
+    <Window.Resources>
+		<utils:NullBoolConverter x:Key="NullBool"/>
+    </Window.Resources>
     <Grid>
-        <Grid IsVisible="{Binding OverlayVisible}">
-			<Border Background="Gray"/>
+        <Grid IsVisible="{Binding CurrentOverlay,Converter={StaticResource NullBool}}"
+              ZIndex="1000">
+			<Border Background="Black"
+                    Opacity="0.5"/>
             <ContentControl Margin="20"
                             Background="White"
-                            CornerRadius="3"/>
+                            CornerRadius="3"
+                            Content="{Binding CurrentOverlay}"/>
         </Grid>
 		<ContentControl Content="{Binding CurrentView}"/>
     </Grid>

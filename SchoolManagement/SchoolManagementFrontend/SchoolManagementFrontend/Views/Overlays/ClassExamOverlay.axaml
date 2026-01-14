@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SchoolManagementFrontend.ClassExamOverlay">
+  <Grid Margin="5">
+      <Grid.RowDefinitions>
+		  <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <Grid Grid.Row="0">
+          <Grid.ColumnDefinitions>
+			  <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+		  <Button Command="{Binding CloseCommand}"
+                  HorizontalAlignment="Left"
+                  Background="Transparent">X</Button>
+          <TextBlock Text="Create Exam"
+                     HorizontalAlignment="Center"/>
+      </Grid>
+	  <StackPanel Grid.Row="1" Spacing="5" Margin="0,10,0,0">
+          <TextBlock Text="Class"/>
+          <ComboBox ItemsSource="{Binding Classes}"
+                    SelectedItem="{Binding SelectedClass}"
+                    DisplayMemberBinding="{Binding Name}"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="{Binding IsCreating}"/>
+          
+          <TextBlock Text="Subject"/>
+          <ComboBox ItemsSource="{Binding Subjects}"
+                    SelectedItem="{Binding SelectedSubject}"
+                    DisplayMemberBinding="{Binding BaseSubject.Name}"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="{Binding IsCreating}"/>
+
+		  <TextBlock Text="Exam Name"/>
+          <TextBox Text="{Binding ExamTitle,Mode=TwoWay}" Watermark="Enter Exam Name..."/>
+
+          <TextBlock Text="Date"/>
+          <DatePicker SelectedDate="{Binding Date,Mode=TwoWay}"
+                      HorizontalAlignment="Center"/>
+          <Button Command="{Binding SaveCommand}"
+                  Margin="0,20,0,0"
+                  HorizontalAlignment="Center"
+                  Width="100"
+                  Background="LightBlue">
+            <TextBlock Text="Save"
+                       HorizontalAlignment="Center"/>
+          </Button>
+      </StackPanel>
+  </Grid>
+</UserControl>

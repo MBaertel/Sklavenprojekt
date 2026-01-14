@@ -1,10 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SchoolManagementDomain.Core.Models.Exams;
+using SchoolManagementDomain.Types;
 using SchoolManagementInfrastructure.EF.Models;
+using SchoolManagementInfrastructure.Services;
 
 namespace SchoolManagementInfrastructure.EF
 {
     public class SchoolManagementContext : DbContext
     {
+        private readonly IFileSystem _fileSystem;
+
         public DbSet<EFStudent> Students { get; set; }
         public DbSet<EFTeacher> Teachers { get; set; }
         public DbSet<EFClassTeacher> ClassTeachers { get; set; }
@@ -19,6 +24,11 @@ namespace SchoolManagementInfrastructure.EF
         public DbSet<EFExamImage> ExamImages { get; set; }
         public DbSet<EFUser> Users { get; set; }
 
+        public SchoolManagementContext(DbContextOptions<SchoolManagementContext> options,IFileSystem fs)
+            :base(options)
+        {
+            _fileSystem = fs;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -175,6 +185,26 @@ namespace SchoolManagementInfrastructure.EF
                 entity.Property(e => e.Role);
             });
 
+        }
+
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            var newImages = ChangeTracker.Entries<EFExamImage>()
+                .Where(x => x.State == EntityState.Added)
+                .ToList();
+
+            foreach (var entry in newImages)
+            {
+                var image = entry.Entity;
+
+                if(image.ImageData != null)
+                {
+                    image.Link = await _fileSystem.SaveFile($"{image.Id.ToString()}.jpg", image.ImageData);
+                    image.ImageData = null;
+                }
+            }
+
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess,cancellationToken);
         }
     }
 }
