@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:util="using:SchoolManagementFrontend.Utils"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SchoolManagementFrontend.GroupControl">
+    
+  <UserControl.Resources>
+        <util:ExpanderAngleConverter x:Key="BoolToAngle"/>
+  </UserControl.Resources>
+  <StackPanel>
+	  <ToggleButton IsChecked="{Binding IsExpanded,RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    HorizontalAlignment="Stretch"
+                    Theme="{x:Null}"
+                    Classes="group-header">
+		  <StackPanel Orientation="Horizontal">
+              <Path Data="M 0 0 L 8 8 L 16 0"
+                    Stroke="DarkGray"
+                    StrokeThickness="1"
+                    Width="12"
+                    Height="8"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,4,0">
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="{Binding IsExpanded,RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToAngle}}"/>
+                    </Path.RenderTransform>
+                </Path>
+			  <TextBlock Text="{Binding HeaderText,RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Margin="6,0,0,0"
+                FontSize="16"
+                Foreground="Black"/>
+          </StackPanel>
+      </ToggleButton>
+      <ListBox ItemsSource="{Binding ItemsSource,RelativeSource={RelativeSource AncestorType=UserControl}}"
+               IsVisible="{Binding IsExpanded,RelativeSource={RelativeSource AncestorType=UserControl}}"
+               ItemTemplate="{Binding DataTemplate,RelativeSource={RelativeSource AncestorType=UserControl}}"
+               SelectionMode="Single"
+               SelectedItem="{Binding SelectedItem,Mode=TwoWay,RelativeSource={RelativeSource AncestorType=UserControl}}"
+               Background="Transparent">
+      </ListBox>
+  </StackPanel>
+    <UserControl.Styles>
+    <Style Selector="ToggleButton.group-header">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <Style Selector="ToggleButton.group-header:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#22000000"/>
+    </Style>
+
+    <Style Selector="ToggleButton.group-header:checked /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style Selector="ToggleButton.group-header:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#22000000"/>
+    </Style>
+
+    <Style Selector="ListBoxItem /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#22000000"/>
+    </Style>
+
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background" Value="#33000000"/>
+    </Style>
+
+    <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#44000000"/>
+    </Style>
+</UserControl.Styles>
+</UserControl>

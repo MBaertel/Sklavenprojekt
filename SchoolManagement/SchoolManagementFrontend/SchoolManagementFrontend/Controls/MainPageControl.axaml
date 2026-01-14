@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SchoolManagementFrontend.MainPageControl">
+  <UserControl.Resources>
+	    <DataTemplate x:Key="PageItemTemplate">
+            <Grid Margin="0">
+                <Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+					<Svg Grid.Column="0"
+                        HorizontalAlignment="Center"
+                        Path="{Binding IconPath}"
+                        Width="30"
+                        Height="30"
+                        Stretch="Uniform"
+                        Margin="0"/>
+                <TextBlock Grid.Row="1"
+                            Text="{Binding Title}"
+                            FontSize="11"/>
+            </Grid>
+           </DataTemplate>
+    </UserControl.Resources>
+    <SplitView IsPaneOpen="{Binding IsMenuOpen}"
+               DisplayMode="CompactInline"
+               CompactPaneLength="60">
+	    <SplitView.Pane>
+                <ListBox ItemsSource="{Binding Pages}"
+                         SelectedItem="{Binding CurrentPage}"
+                         ItemTemplate="{StaticResource PageItemTemplate}"
+                         Grid.Row="1">
+                </ListBox>
+        </SplitView.Pane>
+        <SplitView.Content>
+			<ContentControl Content="{Binding CurrentViewModel}"/>
+        </SplitView.Content>
+    </SplitView>
+</UserControl>
