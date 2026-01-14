@@ -8,6 +8,8 @@ namespace SchoolManagementDomain.Core.Models.Exams
         public ClassExam BaseExam { get; set; }
         public int Score { get; set; }
         public Student Student { get; set; }
-        public int Grade { get; set; }
+        public string Grade { get; set; }
+        public DateTime HandedInAt { get; set; }
+        public bool Finalized { get; set; }
     }
 }

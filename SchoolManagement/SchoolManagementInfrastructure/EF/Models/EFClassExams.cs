@@ -12,7 +12,7 @@
         public Guid SubjectId { get; set; }
 
         public DateTime Date { get; set; }
-
+        public bool Open { get; set; }
 
         public ICollection<EFIndividualExam> IndividualExams { get; set; }
     }

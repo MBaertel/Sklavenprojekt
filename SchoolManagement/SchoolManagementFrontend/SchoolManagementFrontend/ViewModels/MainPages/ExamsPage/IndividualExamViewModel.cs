@@ -14,6 +14,10 @@ namespace SchoolManagementFrontend.ViewModels.MainPages.ExamsPage
         public string StudentName => exam.Student.Name;
         public int Score => exam.Score;
 
+        public string Grade => exam.Grade;
+
+        public string HandedInAt => exam.HandedInAt.ToString();
+
         public IndividualExamViewModel(IndividualExam exam)
         {
             this.exam = exam;

@@ -14,4 +14,8 @@ public partial class ExamsPage : UserControl
     private void TextBlock_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
     }
+
+    private void TextBlock_ActualThemeVariantChanged(object? sender, System.EventArgs e)
+    {
+    }
 }

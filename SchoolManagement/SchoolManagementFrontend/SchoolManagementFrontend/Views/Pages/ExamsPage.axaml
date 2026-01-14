@@ -23,7 +23,8 @@
                   Background="#FAFAFA">
             <TreeView.DataTemplates>
                 <TreeDataTemplate DataType="examspage:ClassGroupViewModel" ItemsSource="{Binding Subjects}">
-					<TextBlock Text="{Binding ClassName}"/>
+					<TextBlock Text="{Binding ClassName}"
+                               FontSize="16"/>
                 </TreeDataTemplate>
 				<TreeDataTemplate DataType="examspage:SubjectGroupViewModel" ItemsSource="{Binding Exams}">
 					<TextBlock Text="{Binding SubjectName}"/>
@@ -34,9 +35,10 @@
 							<ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Name}" Foreground="#0C0C0C"/>
                         <TextBlock Text="{Binding Date}" Grid.Column="1"
-                                   Margin="0,0,4,0"/>
+                                   Margin="0,0,4,0"
+                                   Foreground="#0C0C0C"/>
                     </Grid>
                 </DataTemplate>
             </TreeView.DataTemplates>
@@ -63,7 +65,7 @@
                        Grid.Column="1" Grid.Row="0"
                        FontSize="18"
                        VerticalAlignment="Center"/>
-            <TextBlock Text="Offen"
+            <TextBlock Text="{Binding SelectedExam.StatusString}"
                        FontSize="14"
                        Grid.Row="1"
                        Margin="8,0,0,0"/>
@@ -75,15 +77,21 @@
                 <TextBlock Text="{Binding SelectedExam.Average}"
                            FontSize="14"/>
             </StackPanel>
-			<DataGrid ItemsSource="{Binding SelectedExam.IndividualExams}"
+            <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                    BorderThickness="0,2,0,0"
+                    BorderBrush="#DFDFDF">
+				<DataGrid ItemsSource="{Binding SelectedExam.IndividualExams}"
                       VerticalAlignment="Stretch"
-                      HorizontalAlignment="Stretch"
-                      Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-			    <DataGrid.Columns>
-				    <DataGridTextColumn Header="Schüler" Binding="{Binding StudentName}"/>
-                    <DataGridTextColumn Header="Note" Binding="{Binding Score}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                      HorizontalAlignment="Stretch">
+			        <DataGrid.Columns>
+				        <DataGridTextColumn Header="Schüler" Binding="{Binding StudentName}"
+                                Width="*"/>
+                        <DataGridTextColumn Header="Note" Binding="{Binding Grade}"/>
+                        <DataGridTextColumn Header="Score" Binding="{Binding Score}"/>
+                        <DataGridTextColumn Header="Abgegeben" Binding="{Binding HandedInAt}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
         </Grid>
         </Border>
         

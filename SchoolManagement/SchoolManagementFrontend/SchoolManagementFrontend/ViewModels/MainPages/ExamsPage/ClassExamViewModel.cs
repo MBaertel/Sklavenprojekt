@@ -16,9 +16,8 @@ namespace SchoolManagementFrontend.ViewModels.MainPages.ExamsPage
         public string Name => exam.Name;
         public DateTime Date => exam.Date;
         public int Count => IndividualExams.Count;
-
         public double Average => IndividualExams.Any() ? Math.Round(IndividualExams.Average(x => x.Score),2) : 0;
-
+        public string StatusString => exam.Open ? "Offen" : "Abgeschlossen";
         public string SubjectName => exam.Subject.BaseSubject.Name;
         public string ClassName => exam.Class.Name;
   
