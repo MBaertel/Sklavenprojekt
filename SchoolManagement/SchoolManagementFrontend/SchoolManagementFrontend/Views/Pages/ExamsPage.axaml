@@ -35,10 +35,10 @@
 							<ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}" Foreground="#0C0C0C"/>
+                        <TextBlock Text="{Binding Name}" Foreground="#0E0E0E"/>
                         <TextBlock Text="{Binding Date}" Grid.Column="1"
                                    Margin="0,0,4,0"
-                                   Foreground="#0C0C0C"/>
+                                   Foreground="#0E0E0E"/>
                     </Grid>
                 </DataTemplate>
             </TreeView.DataTemplates>
@@ -94,7 +94,5 @@
             </Border>
         </Grid>
         </Border>
-        
-        
     </Grid>
 </UserControl>

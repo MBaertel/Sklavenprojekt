@@ -30,6 +30,13 @@ namespace SchoolManagementFrontend.ViewModels
             Initialize();
         }
 
+        private bool _overlayVisible = false;
+        public bool OverlayVisible
+        {
+            get => _overlayVisible;
+            set => SetProperty(ref _overlayVisible, value);
+        }
+
         private void OnLoginSucceeded(object? sender, bool e)
         {
             CurrentView = _mainPageViewModel;
