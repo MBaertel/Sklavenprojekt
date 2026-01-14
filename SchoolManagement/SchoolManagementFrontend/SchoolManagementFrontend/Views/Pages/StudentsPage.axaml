@@ -1,10 +1,19 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:SchoolManagementFrontend"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:studentspage="using:SchoolManagementFrontend.ViewModels.MainPages.StudentsPage"
+             xmlns:utils="using:SchoolManagementFrontend.Utils"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SchoolManagementFrontend.StudentsPage">
+       <UserControl.Resources>
+        <utils:NullBoolConverter x:Key="NullBool"/>
+        <utils:NullBoolInverter x:Key="NullBoolInv"/>
+        <utils:FinalizedConverter x:Key="Finalized"/>
+        <utils:Inverter x:Key="Inverter"/>
+        <utils:PathToImageConverter x:Key="PathToImage"/>
+    </UserControl.Resources>
   <Grid>
 	  <Grid.ColumnDefinitions>
 		  <ColumnDefinition Width="*"/>
@@ -12,15 +21,72 @@
           <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <TreeView Grid.Column="0" 
-                ItemsSource="{Binding Classes}">
+                ItemsSource="{Binding Classes}"
+                SelectedItem="{Binding SelectedStudent}"
+                Background="#FAFAFA">
 		  <TreeView.DataTemplates>
 			  <TreeDataTemplate DataType="studentspage:ClassGroupViewModel" ItemsSource="{Binding Students}">
-				  <TextBlock Text="{Binding ClassName}"/>
+				  <TextBlock Text="{Binding ClassName}"
+                             FontSize="16"/>
               </TreeDataTemplate>
               <DataTemplate DataType="studentspage:StudentViewModel">
 				  <TextBlock Text="{Binding StudentName}"/>
               </DataTemplate>
           </TreeView.DataTemplates>
       </TreeView>
+      <Border Grid.Column="1"
+                Grid.ColumnSpan="2"
+                BorderBrush="#DFDFDF"
+                BorderThickness="1,0,0,0">
+            <DataGrid ItemsSource="{Binding SelectedStudent.Exams}"                          
+                SelectedItem="{Binding SelectedIndividualExam,Mode=TwoWay}"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch">
+          			        <DataGrid.Columns>
+				        <DataGridTextColumn Header="Schüler" Binding="{Binding StudentName}"
+                                Width="*"/>
+                        <DataGridTextColumn Header="Subject" Binding="{Binding SubjectName}"/>
+                        <DataGridTextColumn Header="Teacher" Binding="{Binding TeacherName}"/>
+                        <DataGridTextColumn Header="Note" Binding="{Binding Grade}"/>
+                        <DataGridTextColumn Header="Score" Binding="{Binding Score}"/>
+                        <DataGridTemplateColumn Header="Abgegeben">
+							<DataTemplate>
+								<Grid>
+									<Button Command="{Binding HandInCommand}"
+                                            IsVisible="{Binding HandedInAt,Converter={StaticResource NullBoolInv}}"
+                                            HorizontalContentAlignment="Center"
+                                            HorizontalAlignment="Stretch"
+                                            Margin="3">
+                                        Hand In
+                                    </Button>
+                                    <TextBlock Text="{Binding HandedInAt}"
+                                               IsVisible="{Binding HandedInAt,Converter={StaticResource NullBool}}"
+                                               VerticalAlignment="Center"
+                                               Margin="3,0,3,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Finalized">
+							<DataTemplate>
+								<Grid>
+						            <Button Command="{Binding FinalizeCommand}"
+                                            IsVisible="{Binding Finalized,Converter={StaticResource Inverter}}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Margin="3">
+                                        Finalize
+                                    </Button>
+                                    <TextBlock Text="✓"
+                                               IsVisible="{Binding Finalized}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+            </DataGrid>
+      </Border>
+      <local:ExamSlideControl Grid.Column="2"
+            Exam="{Binding SelectedIndividualExam,Mode=TwoWay}"
+            IsVisible="{Binding SelectedExamVisible}"
+            CloseCommand="{Binding DeselectCommand}"/>
   </Grid>
 </UserControl>

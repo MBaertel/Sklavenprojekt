@@ -4,6 +4,7 @@ using SchoolManagementDomain.Core.Models.Classes;
 using SchoolManagementDomain.Core.Models.Exams;
 using SchoolManagementDomain.Core.Models.Subjects;
 using SchoolManagementFrontend.Services.Interface;
+using SchoolManagementFrontend.Services.Mock;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -112,7 +113,7 @@ namespace SchoolManagementFrontend.ViewModels.Overlays
         private async Task LoadClasses()
         {
             Classes.Clear();
-            var classes = await _backendService.GetClasses(teacherId: Guid.Parse("95744a52-7107-49be-836e-72505ff04e05"));
+            var classes = await _backendService.GetClasses(teacherId: MockDataProvider.Teachers.First().Id);
             foreach (var item in classes)
             {
                 Classes.Add(item);
@@ -122,7 +123,7 @@ namespace SchoolManagementFrontend.ViewModels.Overlays
         private async Task OnClassSelected()
         {
             Subjects.Clear();
-            var subjects = await _backendService.GetSubjects(teacherId: Guid.Parse("95744a52-7107-49be-836e-72505ff04e05"));
+            var subjects = await _backendService.GetSubjects(teacherId: MockDataProvider.Teachers.First().Id);
             subjects = subjects.Where(x => x.Class.Id == _selectedClass.Id).ToList();
             foreach (var item in subjects)
             {

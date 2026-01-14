@@ -4,6 +4,7 @@ using SchoolManagementDomain.Core.Models.Classes;
 using SchoolManagementDomain.Core.Models.Exams;
 using SchoolManagementDomain.Core.Models.Subjects;
 using SchoolManagementFrontend.Services.Interface;
+using SchoolManagementFrontend.Services.Mock;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -38,22 +39,30 @@ namespace SchoolManagementFrontend.ViewModels.MainPages.ExamsPage
             {
                 SetProperty(ref _selectedIndividualExam, value);
                 if(value != null) value.LoadImages();
+                SelectedExamVisible = value == null? false : true;
             }
         }
 
-        public ICommand DeselectCommand { get; }
+        private bool _selectedExamVisible = false;
+        public bool SelectedExamVisible
+        {
+            get => _selectedExamVisible;
+            set => SetProperty(ref _selectedExamVisible, value);
+        }
+
+        public ICommand? DeselectCommand { get; }
 
         public ExamsPageViewModel(IBackendService backendService)
         {
             _backendService = backendService;
             _backendService.NewObject += () => Load();
-            DeselectCommand = new RelayCommand(() => SelectedIndividualExam = null);
+            DeselectCommand = new RelayCommand(() => SelectedIndividualExam=null);
             Load();
         }
 
         public async Task Load()
         {
-            var exams = await _backendService.GetClassExams(teacherId: Guid.Parse("95744a52-7107-49be-836e-72505ff04e05"));
+            var exams = await _backendService.GetClassExams(teacherId: MockDataProvider.Teachers.First().Id);
             ClassGroups.Clear();
 
             var allExams = exams.Select(x => new ClassExamViewModel(x, _backendService));

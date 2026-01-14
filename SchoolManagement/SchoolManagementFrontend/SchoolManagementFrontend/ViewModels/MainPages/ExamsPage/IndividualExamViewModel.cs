@@ -21,6 +21,9 @@ namespace SchoolManagementFrontend.ViewModels.MainPages.ExamsPage
 
         public string StudentName => exam.Student.Name;
 
+        public string SubjectName => exam.BaseExam.Subject.BaseSubject.Name;
+        public string TeacherName => exam.BaseExam.Subject.Teacher.Name;
+
         private int? _score;
         public int? Score
         {

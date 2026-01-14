@@ -66,12 +66,12 @@ namespace SchoolManagementFrontend.Services.Mock
 
         public async Task<bool> HasStoredCredentials()
         {
-            return true;
+            return false;
         }
 
         public async Task<bool> TryRefresh()
         {
-            return true;
+            return false;
         }
     }
 }
